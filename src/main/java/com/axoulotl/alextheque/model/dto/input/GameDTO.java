@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GameDTO {
-    private Integer id;
     private String name;
     private String console;
     private Boolean inbox;

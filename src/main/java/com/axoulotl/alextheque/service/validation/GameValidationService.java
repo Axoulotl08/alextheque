@@ -12,6 +12,12 @@ public class GameValidationService {
         validateGameName(gameDTO);
     }
 
+    /**
+     * Validate the name of the GameDTO
+     * Should not be null or empty
+     * @param gameDTO - GameDTO to validate the name
+     * @throws AlexthequeStandardError if the name is empty or null
+     */
     private void validateGameName(GameDTO gameDTO) throws AlexthequeStandardError {
         if(StringUtils.isEmpty(gameDTO.getName())) {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "Le nom ne doit pas être nul");

@@ -2,6 +2,7 @@ package com.axoulotl.alextheque.controller;
 
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
+import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.service.GameService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,10 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -26,7 +24,7 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    @Operation(summary = "Add a new game in colelction")
+    @Operation(summary = "Add a new game in collection")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
             description = "Successfully added the game to the collection",
@@ -41,12 +39,15 @@ public class GameController {
     })
     @PostMapping("/game")
     public ResponseEntity<Object> addGame(@RequestBody GameDTO gameDTO) {
-//        try{
-//            return gameService.addGame(gameDTO);
-            return ResponseEntity.accepted().build();
-//        }
-//        catch (AlexthequeStandardError ex){
-//            return ResponseEntity.badRequest().build();
-//        }
+        try{
+            return gameService.addGame(gameDTO);
+        }
+        catch (AlexthequeStandardError ex){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Game> getGameById(@RequestParam int id) {
+        return ResponseEntity.ok().build();
     }
 }
