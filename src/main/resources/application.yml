@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: Alexthèque
+  datasource:
+    url: jdbc:mysql://localhost:3306/alextheque?createDatabaseIfNotExist=true
+    username: alex
+    password: alex
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    show-sql: true
+server:
+  port: 8081
