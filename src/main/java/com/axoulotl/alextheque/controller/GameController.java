@@ -1,6 +1,7 @@
 package com.axoulotl.alextheque.controller;
 
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
+import com.axoulotl.alextheque.exception.AlexthequeTechnicalError;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.service.GameService;

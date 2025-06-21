@@ -1,23 +1,34 @@
 package com.axoulotl.alextheque.GameTest;
 
+import com.axoulotl.alextheque.AlexthequeApplication;
 import com.axoulotl.alextheque.TestContenerTestConfig;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.repository.GameRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest // Charge le contexte Spring Boot complet
+@AutoConfigureMockMvc
+@Transactional
 public class ControllerGameTest extends TestContenerTestConfig {
 
     private static final String ADD_GAME = "/api/v1/game";
@@ -25,7 +36,15 @@ public class ControllerGameTest extends TestContenerTestConfig {
     @Autowired
     GameRepository gameRepository;
 
+    @Autowired
     MockMvc mockMvc;
+
+    private static ObjectMapper mapper = new ObjectMapper();
+
+    @Test
+    void contextLoads(){
+
+    }
 
     @Test
     public void testControllerGame() {
@@ -46,9 +65,31 @@ public class ControllerGameTest extends TestContenerTestConfig {
         gameDTO.setInbox(true);
         gameDTO.setName("TestName");
 
-        mockMvc.perform(post(ADD_GAME).content())
-                .andDo(print())
-                .andExpect();
+        String json = mapper.writeValueAsString(gameDTO);
 
+        this.mockMvc.perform(post(ADD_GAME)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("TestName"))
+                .andExpect(jsonPath("$.console").value("TestConsole"));
     }
+
+    @Test
+    public void whenAddGame_GivenBlankName_thenResponseWith4XX() throws Exception{
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setName("");
+        gameDTO.setInbox(true);
+        gameDTO.setConsole("Testconsole");
+
+        String json = mapper.writeValueAsString(gameDTO);
+
+        this.mockMvc.perform(post(ADD_GAME)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
 }
