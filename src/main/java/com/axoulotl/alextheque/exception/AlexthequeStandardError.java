@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class AlexthequeStandardError extends Exception {
-    private StandardErrorEnum error;
-    private String comment;
+    private final StandardErrorEnum error;
+    private final String comment;
 
     public AlexthequeStandardError(StandardErrorEnum error, String comment) {
         super();

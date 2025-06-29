@@ -91,5 +91,4 @@ public class ControllerGameTest extends TestContenerTestConfig {
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
-
 }

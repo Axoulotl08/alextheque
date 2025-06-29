@@ -9,5 +9,4 @@ public class GameDTO {
     private String name;
     private String console;
     private Boolean inbox;
-
 }
