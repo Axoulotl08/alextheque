@@ -11,7 +11,7 @@ public enum Zone {
     private final Integer numZone;
     private static final Map<Integer, Zone> mapOfZoneById = new HashMap<>();
 
-    private Zone(Integer numZone) {
+    Zone(Integer numZone) {
         this.numZone = numZone;
     }
 
