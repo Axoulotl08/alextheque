@@ -12,4 +12,8 @@ public class AlexthequeStandardError extends Exception {
         this.error = error;
         this.comment = comment;
     }
+
+    public String getRootCause() {
+        return this.error.toString() + " : " + this.comment;
+    }
 }
