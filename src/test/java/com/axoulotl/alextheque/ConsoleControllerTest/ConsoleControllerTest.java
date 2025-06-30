@@ -2,12 +2,11 @@ package com.axoulotl.alextheque.ConsoleControllerTest;
 
 import com.axoulotl.alextheque.TestContenerTestConfig;
 import com.axoulotl.alextheque.model.dto.input.ConsoleDTO;
-import com.axoulotl.alextheque.model.dto.input.GameDTO;
-import com.axoulotl.alextheque.model.entity.Game;
-import com.axoulotl.alextheque.repository.GameRepository;
+import com.axoulotl.alextheque.model.entity.Console;
+import com.axoulotl.alextheque.model.entity.enums.Zone;
+import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,10 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class ConsoleControllerTest extends TestContenerTestConfig {
 
-    private static final String ADD_CONSOLE = "/api/v1/console";
+    private static final String CONSOLE = "/api/v1/console";
 
     @Autowired
-    GameRepository gameRepository;
+    ConsoleRepository consoleRepository;
 
     @Autowired
     MockMvc mockMvc;
@@ -63,7 +62,7 @@ public class ConsoleControllerTest extends TestContenerTestConfig {
 
         String json = mapper.writeValueAsString(consoleDTO);
 
-        this.mockMvc.perform(post(ADD_CONSOLE)
+        this.mockMvc.perform(post(CONSOLE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
@@ -87,7 +86,7 @@ public class ConsoleControllerTest extends TestContenerTestConfig {
 
         String json = mapper.writeValueAsString(consoleDTO);
 
-        this.mockMvc.perform(post(ADD_CONSOLE)
+        this.mockMvc.perform(post(CONSOLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
@@ -95,5 +94,31 @@ public class ConsoleControllerTest extends TestContenerTestConfig {
                 .andExpect(jsonPath("$.message").value("The name should not be empty of null."))
                 .andExpect(jsonPath("$.typeError").value("ERROR_INPUT"));
 
+    }
+
+    @Test
+    public void whenGetConsole_thenRespondWith200() throws Exception {
+        LocalDateTime nowMinusOneHour = LocalDateTime.now().minusHours(1L).truncatedTo(ChronoUnit.MILLIS);
+
+        Console console1 = new Console();
+        console1.setName("Name");
+        console1.setManufacturer("Manuf");
+        console1.setZone(Zone.JAP);
+        console1.setLaunchDate(nowMinusOneHour);
+
+        Console console2 = new Console();
+        console2.setName("Name2");
+        console2.setManufacturer("Manuf2");
+        console2.setZone(Zone.EUR);
+        console2.setLaunchDate(nowMinusOneHour);
+
+        consoleRepository.save(console1);
+        consoleRepository.save(console2);
+
+        this.mockMvc.perform(get(CONSOLE))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.consoleList").isNotEmpty())
+                .andExpect(jsonPath("$.consoleList.length").value(2));
     }
 }

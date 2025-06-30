@@ -13,10 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -39,12 +36,12 @@ public class ConsoleController {
             @ApiResponse(responseCode = "400",
             description = "An error occurred while trying to add the console",
             content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
             }),
             @ApiResponse(responseCode = "500",
             description = "An technical error occurred while trying to add the console",
             content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
             })
     })
     @PostMapping("/console")
@@ -57,6 +54,35 @@ public class ConsoleController {
                 responseEntity =  ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
             if(ex.getError() == StandardErrorEnum.ERROR_DATABASE)
                 responseEntity =  ResponseEntity.internalServerError().body(new ErrorDTO(ex.getComment(), ex.getError()));
+        }
+        return responseEntity;
+    }
+
+    @Operation(summary = "Get all console in collection")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Successfully added the console to the collection",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Console.class))
+                    }),
+            @ApiResponse(responseCode = "400",
+                    description = "An error occurred while trying to add the console",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
+                    }),
+            @ApiResponse(responseCode = "500",
+                    description = "An technical error occurred while trying to add the console",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
+                    })
+    })
+    @GetMapping("/console")
+    public ResponseEntity<Object> getConsole(){
+        ResponseEntity<Object> responseEntity = null;
+        try{
+            responseEntity = ResponseEntity.ok().body(consoleService.getAllConsole());
+        } catch (Exception e) {
+            responseEntity = ResponseEntity.internalServerError().build();
         }
         return responseEntity;
     }
