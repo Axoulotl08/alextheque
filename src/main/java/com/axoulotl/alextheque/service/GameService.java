@@ -3,7 +3,9 @@ package com.axoulotl.alextheque.service;
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
+import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.Game;
+import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.repository.GameRepository;
 import com.axoulotl.alextheque.service.validation.GameValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,15 @@ public class GameService {
 
     GameRepository gameRepository;
     GameValidationService gameValidationService;
+    ConsoleRepository consoleRepository;
 
     @Autowired
     public GameService(GameRepository gameRepository,
-                       GameValidationService gameValidationService) {
+                       GameValidationService gameValidationService,
+                       ConsoleRepository consoleRepository) {
         this.gameRepository = gameRepository;
         this.gameValidationService = gameValidationService;
+        this.consoleRepository = consoleRepository;
     }
 
     /**
@@ -34,9 +39,11 @@ public class GameService {
     public ResponseEntity<Object> addGame(GameDTO gameDTO) throws AlexthequeStandardError {
         gameValidationService.validateGameInsert(gameDTO);
 
+        Console console = consoleRepository.getReferenceById(gameDTO.getConsole());
+
         Game game = Game.builder()
                 .name(gameDTO.getName())
-                .console(gameDTO.getConsole())
+                .console(console)
                 .inbox(gameDTO.getInbox())
                 .build();
 

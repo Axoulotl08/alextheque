@@ -50,7 +50,7 @@ public class ControllerGameTest extends TestContenerTestConfig {
     public void testControllerGame() {
         Game game = new Game();
         game.setName("Test");
-        game.setConsole("Test");
+//        game.setConsole("Test");
         game.setInbox(Boolean.TRUE);
         gameRepository.save(game);
 
@@ -61,7 +61,7 @@ public class ControllerGameTest extends TestContenerTestConfig {
     @Test
     public void whenAddGame_GivenGoodDTO_thenRespondWith200() throws Exception {
         GameDTO gameDTO = new GameDTO();
-        gameDTO.setConsole("TestConsole");
+//        gameDTO.setConsole("TestConsole");
         gameDTO.setInbox(true);
         gameDTO.setName("TestName");
 
@@ -81,7 +81,7 @@ public class ControllerGameTest extends TestContenerTestConfig {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setName("");
         gameDTO.setInbox(true);
-        gameDTO.setConsole("Testconsole");
+//        gameDTO.setConsole("Testconsole");
 
         String json = mapper.writeValueAsString(gameDTO);
 
