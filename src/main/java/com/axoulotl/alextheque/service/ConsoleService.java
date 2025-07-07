@@ -11,6 +11,8 @@ import com.axoulotl.alextheque.service.validation.ConsoleValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ConsoleService {
 
@@ -55,11 +57,8 @@ public class ConsoleService {
      *
      * @return all the console that are saved into DB.
      */
-    public Consoles getAllConsole(){
-        Consoles consoles = new Consoles();
+    public List<Console> getAllConsole(){
 
-        consoles.setConsoleList(consoleRepository.findAll());
-
-        return consoles;
+        return consoleRepository.findAll();
     }
 }

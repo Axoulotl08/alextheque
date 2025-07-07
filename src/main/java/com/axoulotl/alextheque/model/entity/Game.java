@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Data
-@Getter
-@Setter
 @Builder
 public class Game {
     @Id
@@ -21,8 +19,9 @@ public class Game {
     @Column(name = "game_name")
     private String name;
 
-    @Column(name = "game_console")
-    private String console;
+    @ManyToOne
+    @JoinColumn(name = "console_id")
+    private Console console;
 
     @Column(
             name = "game_creation_date",
