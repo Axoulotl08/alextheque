@@ -67,6 +67,7 @@ public class GameService {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "An error occurred while trying to save in DB.");
         }
 
+        // Convert and return entity
         return ResponseEntity.ok(converter.gameToGameDTO(game));
     }
 
