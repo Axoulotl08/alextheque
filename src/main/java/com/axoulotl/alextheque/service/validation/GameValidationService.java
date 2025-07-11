@@ -10,6 +10,19 @@ import org.springframework.stereotype.Service;
 public class GameValidationService {
     public void validateGameInsert(GameDTO gameDTO) throws AlexthequeStandardError {
         validateGameName(gameDTO);
+        validateGameConsole(gameDTO);
+    }
+
+    /**
+     * Validate the gameId console
+     * Should be greater than 0.
+     * Check is console existe is made in service
+     * @param gameDTO - GameDTO to validate the console
+     */
+    private void validateGameConsole(GameDTO gameDTO) throws AlexthequeStandardError {
+        if(gameDTO.getConsole() <= 0){
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "Console Id should be greater than 0");
+        }
     }
 
     /**

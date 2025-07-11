@@ -5,6 +5,7 @@ import com.axoulotl.alextheque.model.dto.input.ConsoleDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.enums.Zone;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
+import com.axoulotl.alextheque.repository.GameRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,13 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest // Charge le contexte Spring Boot complet
+@SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
 public class ConsoleControllerTest extends TestContenerTestConfig {
@@ -34,6 +36,9 @@ public class ConsoleControllerTest extends TestContenerTestConfig {
 
     @Autowired
     ConsoleRepository consoleRepository;
+
+    @Autowired
+    GameRepository gameRepository;
 
     @Autowired
     MockMvc mockMvc;
@@ -118,7 +123,9 @@ public class ConsoleControllerTest extends TestContenerTestConfig {
         this.mockMvc.perform(get(CONSOLE))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.consoleList").isNotEmpty())
-                .andExpect(jsonPath("$.consoleList.length").value(2));
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].name").value("Name"))
+                .andExpect(jsonPath("$[1].manufacturer").value("Manuf2"));
     }
 }
