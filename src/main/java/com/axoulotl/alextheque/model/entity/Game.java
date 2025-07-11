@@ -39,6 +39,7 @@ public class Game {
     )
     private LocalDateTime updateDate;
 
-    @Column(name = "game_inbox")
+    @Column(name = "game_inbox",
+    columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean inbox;
 }

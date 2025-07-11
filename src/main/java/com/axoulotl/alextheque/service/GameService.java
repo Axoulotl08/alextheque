@@ -3,10 +3,12 @@ package com.axoulotl.alextheque.service;
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
+import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.repository.GameRepository;
+import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
 import com.axoulotl.alextheque.service.validation.GameValidationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +24,17 @@ public class GameService {
     GameRepository gameRepository;
     GameValidationService gameValidationService;
     ConsoleRepository consoleRepository;
+    GameToGameDTOConverter converter;
 
     @Autowired
     public GameService(GameRepository gameRepository,
                        GameValidationService gameValidationService,
-                       ConsoleRepository consoleRepository) {
+                       ConsoleRepository consoleRepository,
+                       GameToGameDTOConverter converter) {
         this.gameRepository = gameRepository;
         this.gameValidationService = gameValidationService;
         this.consoleRepository = consoleRepository;
+        this.converter = converter;
     }
 
     /**
@@ -61,7 +66,8 @@ public class GameService {
         } catch (Exception e) {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "An error occurred while trying to save in DB.");
         }
-        return ResponseEntity.ok(game);
+
+        return ResponseEntity.ok(converter.gameToGameDTO(game));
     }
 
 }

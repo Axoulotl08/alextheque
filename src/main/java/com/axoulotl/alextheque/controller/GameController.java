@@ -4,6 +4,7 @@ import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.dto.output.ErrorDTO;
+import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
 import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.service.GameService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +32,7 @@ public class GameController {
             @ApiResponse(responseCode = "200",
             description = "Successfully added the game to the collection",
             content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = GameDTO.class))
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = GameOutputDTO.class))
             }),
             @ApiResponse(responseCode = "400",
                     description = "An error occured while trying to add the game",
