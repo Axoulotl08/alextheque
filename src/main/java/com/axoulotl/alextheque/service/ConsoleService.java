@@ -3,10 +3,11 @@ package com.axoulotl.alextheque.service;
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.ConsoleDTO;
-import com.axoulotl.alextheque.model.dto.output.Consoles;
+import com.axoulotl.alextheque.model.dto.output.ConsoleOutputDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.enums.Zone;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
+import com.axoulotl.alextheque.service.converter.ConsoleToConsoleDTOConverter;
 import com.axoulotl.alextheque.service.validation.ConsoleValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,15 @@ public class ConsoleService {
 
     ConsoleRepository consoleRepository;
     ConsoleValidationService consoleValidationService;
+    ConsoleToConsoleDTOConverter converter;
 
     @Autowired
     public ConsoleService(ConsoleRepository consoleRepository,
-                          ConsoleValidationService consoleValidationService){
+                          ConsoleValidationService consoleValidationService,
+                          ConsoleToConsoleDTOConverter converter){
         this.consoleRepository = consoleRepository;
         this.consoleValidationService = consoleValidationService;
+        this.converter = converter;
     }
 
     /**
@@ -57,8 +61,8 @@ public class ConsoleService {
      *
      * @return all the console that are saved into DB.
      */
-    public List<Console> getAllConsole(){
+    public List<ConsoleOutputDTO> getAllConsole(){
 
-        return consoleRepository.findAll();
+        return consoleRepository.findAll().stream().map(converter::convertConsoleToConsoleOutputDTO).toList();
     }
 }
