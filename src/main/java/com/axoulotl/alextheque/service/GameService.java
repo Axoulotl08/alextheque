@@ -8,10 +8,13 @@ import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.repository.GameRepository;
 import com.axoulotl.alextheque.service.validation.GameValidationService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class GameService {
@@ -39,7 +42,13 @@ public class GameService {
     public ResponseEntity<Object> addGame(GameDTO gameDTO) throws AlexthequeStandardError {
         gameValidationService.validateGameInsert(gameDTO);
 
-        Console console = consoleRepository.getReferenceById(gameDTO.getConsole());
+        Console console = new Console();
+        try{
+            console = consoleRepository.getReferenceById(gameDTO.getConsole());
+        }
+        catch (EntityNotFoundException ex){
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "There is no console with this ID.");
+        }
 
         Game game = Game.builder()
                 .name(gameDTO.getName())
@@ -50,7 +59,7 @@ public class GameService {
         try {
             gameRepository.save(game);
         } catch (Exception e) {
-            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "Erreur lors de la sauvegarde en BDD");
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "An error occurred while trying to save in DB.");
         }
         return ResponseEntity.ok(game);
     }
