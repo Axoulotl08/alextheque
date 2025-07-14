@@ -3,6 +3,7 @@ package com.axoulotl.alextheque.controller;
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.ConsoleDTO;
+import com.axoulotl.alextheque.model.dto.output.ConsoleOutputDTO;
 import com.axoulotl.alextheque.model.dto.output.ErrorDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.service.ConsoleService;
@@ -63,7 +64,7 @@ public class ConsoleController {
             @ApiResponse(responseCode = "200",
                     description = "Successfully added the console to the collection",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = Console.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ConsoleOutputDTO.class))
                     }),
             @ApiResponse(responseCode = "400",
                     description = "An error occurred while trying to add the console",
