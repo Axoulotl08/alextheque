@@ -1,6 +1,5 @@
 package com.axoulotl.alextheque.GameTest;
 
-import com.axoulotl.alextheque.AlexthequeApplication;
 import com.axoulotl.alextheque.TestContenerTestConfig;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.entity.Console;
@@ -13,13 +12,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class ControllerGameTest extends TestContenerTestConfig {
+public class GameControllerTest extends TestContenerTestConfig {
 
     private static final String ADD_GAME = "/api/v1/game";
 
@@ -67,10 +62,12 @@ public class ControllerGameTest extends TestContenerTestConfig {
 
     @Test
     public void testControllerGame() {
+        Console console = consoleRepository.findAll().getFirst();
+
         Game game = new Game();
         game.setName("Test");
-//        game.setConsole("Test");
         game.setInbox(Boolean.TRUE);
+        game.setConsole(console);
         gameRepository.save(game);
 
         List<Game> retrieve = gameRepository.findAll();
@@ -79,10 +76,11 @@ public class ControllerGameTest extends TestContenerTestConfig {
 
     @Test
     public void whenAddGame_GivenGoodDTO_thenRespondWith200() throws Exception {
+        Console console = consoleRepository.findAll().getFirst();
         GameDTO gameDTO = new GameDTO();
-//        gameDTO.setConsole("TestConsole");
         gameDTO.setInbox(true);
         gameDTO.setName("TestName");
+        gameDTO.setConsole(console.getId());
 
         String json = mapper.writeValueAsString(gameDTO);
 
@@ -92,7 +90,7 @@ public class ControllerGameTest extends TestContenerTestConfig {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("TestName"))
-                .andExpect(jsonPath("$.console").value("TestConsole"));
+                .andExpect(jsonPath("$.console.name").value(console.getName()));
     }
 
     @Test
@@ -100,7 +98,6 @@ public class ControllerGameTest extends TestContenerTestConfig {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setName("");
         gameDTO.setInbox(true);
-//        gameDTO.setConsole("Testconsole");
 
         String json = mapper.writeValueAsString(gameDTO);
 
