@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class GamesOutputDTO {
     private Long nbGames;
-    private Integer nbPages;
+    private Integer totalPages;
+    private Integer currentPage;
     private List<GameOutputDTO> games;
 }

@@ -92,7 +92,8 @@ public class GameService {
         GamesOutputDTO gamesOutputDTO = GamesOutputDTO.builder()
                 .nbGames(games.getTotalElements())
                 .games(converter.gamesToListOfGames(games.getContent()))
-                .nbPages(games.getTotalPages())
+                .totalPages(games.getTotalPages())
+                .currentPage(page)
                 .build();
         return ResponseEntity.ok().body(gamesOutputDTO);
     }
