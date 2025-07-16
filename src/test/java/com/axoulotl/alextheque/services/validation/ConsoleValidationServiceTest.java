@@ -14,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ConsoleValidationServiceTest {
-    private com.axoulotl.alextheque.service.validation.ConsoleValidationService consoleValidationService;
+    private ConsoleValidationService consoleValidationService;
 
     @BeforeEach
     void setUp() {

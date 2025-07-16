@@ -8,7 +8,6 @@ import com.axoulotl.alextheque.model.entity.enums.Zone;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.service.ConsoleService;
 import com.axoulotl.alextheque.service.validation.ConsoleValidationService;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
