@@ -57,7 +57,7 @@ public class ConsoleControllerTest extends TestContenerTestConfig {
 
     @Test
     public void whenAddConsole_GivenGoodDTO_thenRespondWith200() throws Exception {
-        LocalDateTime now = LocalDateTime.now().minusYears(1L).truncatedTo(ChronoUnit.MICROS);;
+        LocalDateTime now = LocalDateTime.now().minusYears(1L).truncatedTo(ChronoUnit.MICROS);
 
         ConsoleDTO consoleDTO = new ConsoleDTO();
         consoleDTO.setName("TestConsoleName");

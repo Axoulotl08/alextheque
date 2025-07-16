@@ -92,4 +92,37 @@ public class GameController {
         }
         return responseEntity;
     }
+
+    @Operation(summary = "Get a game from its Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Successfully retrieve the games",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GameOutputDTO.class))
+                    }),
+            @ApiResponse(responseCode = "400",
+                    description = "An error occurred while trying to get the game",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                    }),
+            @ApiResponse(responseCode = "500",
+                    description = "A database error occurred while trying to get the game",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                    })
+    })
+    @GetMapping("/game/{id}")
+    public ResponseEntity<Object> getGameById(@PathVariable Integer id) {
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = gameService.getGameFromId(id);
+        } catch (AlexthequeStandardError ex) {
+            responseEntity = ResponseEntity.internalServerError().body(new ErrorDTO(ex.getComment(), ex.getError()));
+        }
+        return responseEntity;
+    }
+
+    public ResponseEntity<Object> updateGameById(@PathVariable Integer id){
+        return ResponseEntity.accepted().build();
+    }
 }

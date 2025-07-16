@@ -3,6 +3,7 @@ package com.axoulotl.alextheque.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -16,7 +17,8 @@ public class Game {
     @Column(name = "game_id")
     private Integer id;
 
-    @Column(name = "game_name")
+    @Column(name = "game_name",
+            nullable = false)
     private String name;
 
     @ManyToOne
@@ -42,4 +44,13 @@ public class Game {
     @Column(name = "game_inbox",
     columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean inbox;
+
+    @Column(name = "game_startDate")
+    private LocalDate startDate;
+
+    @Column(name = "game_endDate")
+    private LocalDate endDate;
+
+    @Column(name = " gameTime")
+    private Long gameTime;
 }
