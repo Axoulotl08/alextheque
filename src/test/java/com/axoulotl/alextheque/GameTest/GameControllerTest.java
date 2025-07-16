@@ -129,4 +129,16 @@ public class GameControllerTest extends TestContenerTestConfig {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
+
+    @Test
+    public void whenGetGame_GivenId_thenResponseWith2XX() throws Exception{
+        Integer gameId = 1;
+        Console console = consoleRepository.save(UtilsTest.createConsole(gameId));
+        gameRepository.save(UtilsTest.createGameWithConsole(gameId, console));
+
+        this.mockMvc.perform(get(GAME +"/" + gameId))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.id").value(gameId));
+    }
 }

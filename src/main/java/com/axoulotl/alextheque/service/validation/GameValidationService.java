@@ -36,5 +36,4 @@ public class GameValidationService {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "Le nom ne doit pas être nul");
         }
     }
-
 }

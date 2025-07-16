@@ -22,5 +22,6 @@ public class TestContenerTestConfig {
         registry.add("spring.datasource.username", mysqlContainer::getUsername);
         registry.add("spring.jpa.properties.hibernate.dialect", () -> "org.hibernate.dialect.MySQLDialect");
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
+        registry.add("spring.jpa.open-in-view", () -> "false");
     }
 }

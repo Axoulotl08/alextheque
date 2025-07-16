@@ -82,7 +82,7 @@ public class GameService {
     /**
      * Return all the game in DB.
      *
-     * @return
+     * @return all the page of game
      */
     public ResponseEntity<Object> getAllGames(int page, int size){
 
@@ -96,5 +96,23 @@ public class GameService {
                 .currentPage(page)
                 .build();
         return ResponseEntity.ok().body(gamesOutputDTO);
+    }
+
+    /**
+     * Return the game with the Id in parameter
+     *
+     * @return - the gameDTO
+     */
+    public ResponseEntity<Object> getGameFromId(Integer id) throws AlexthequeStandardError {
+
+        Game game;
+        try{
+            game = gameRepository.getReferenceById(id);
+        }
+        catch (EntityNotFoundException ex){
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "Game id Id : " + id + " dosn't exist");
+        }
+
+        return ResponseEntity.ok(converter.gameToGameDTO(game));
     }
 }
