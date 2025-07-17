@@ -3,6 +3,7 @@ package com.axoulotl.alextheque.service;
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
+import com.axoulotl.alextheque.model.dto.input.GameUpdateDTO;
 import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
 import com.axoulotl.alextheque.model.dto.output.GamesOutputDTO;
 import com.axoulotl.alextheque.model.entity.Console;
@@ -111,6 +112,31 @@ public class GameService {
         }
         catch (EntityNotFoundException ex){
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "Game id Id : " + id + " dosn't exist");
+        }
+
+        return ResponseEntity.ok(converter.gameToGameDTO(game));
+    }
+
+
+    public ResponseEntity<Object> updateGameFromId(Integer id, GameUpdateDTO gameUpdateDTO) throws AlexthequeStandardError{
+        gameValidationService.validateGameUpdate(gameUpdateDTO);
+
+        Game game;
+        try{
+            game = gameRepository.getReferenceById(id);
+        }
+        catch (EntityNotFoundException ex){
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "Game id Id : " + id + " dosn't exist");
+        }
+
+        game.setGameTime(gameUpdateDTO.getGameTime());
+        game.setEndDate(gameUpdateDTO.getEndDate());
+        game.setStartDate(gameUpdateDTO.getStartDate());
+
+        try {
+            gameRepository.save(game);
+        } catch (Exception e) {
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "An error occurred while trying to save in DB.");
         }
 
         return ResponseEntity.ok(converter.gameToGameDTO(game));

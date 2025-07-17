@@ -3,6 +3,7 @@ package com.axoulotl.alextheque.controller;
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
+import com.axoulotl.alextheque.model.dto.input.GameUpdateDTO;
 import com.axoulotl.alextheque.model.dto.output.ErrorDTO;
 import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
 import com.axoulotl.alextheque.service.GameService;
@@ -122,7 +123,37 @@ public class GameController {
         return responseEntity;
     }
 
-    public ResponseEntity<Object> updateGameById(@PathVariable Integer id){
-        return ResponseEntity.accepted().build();
+    @Operation(summary = "Update a game from its Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Successfully update the games",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GameOutputDTO.class))
+                    }),
+            @ApiResponse(responseCode = "400",
+                    description = "An error occurred while trying to get the game",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                    }),
+            @ApiResponse(responseCode = "500",
+                    description = "A database error occurred while trying to get the game",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                    })
+    })
+    @PatchMapping("/game/{id}")
+    public ResponseEntity<Object> updateGameById(@PathVariable Integer id,
+                                                 @RequestBody GameUpdateDTO gameUpdateDTO){
+        ResponseEntity<Object> responseEntity = null;
+        try{
+            responseEntity =  gameService.updateGameFromId(id, gameUpdateDTO);
+        }
+        catch (AlexthequeStandardError ex){
+            if(ex.getError() == StandardErrorEnum.ERROR_INPUT)
+                responseEntity =  ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
+            if(ex.getError() == StandardErrorEnum.ERROR_DATABASE)
+                responseEntity =  ResponseEntity.internalServerError().body(new ErrorDTO(ex.getComment(), ex.getError()));
+        }
+        return responseEntity;
     }
 }
