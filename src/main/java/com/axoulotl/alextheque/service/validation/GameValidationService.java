@@ -49,7 +49,7 @@ public class GameValidationService {
      */
     public void validateGameUpdate(GameUpdateDTO gameUpdateDTO) throws AlexthequeStandardError {
         if(gameUpdateDTO.getGameTime() != null) validateGameTime(gameUpdateDTO);
-        validateEndDate(gameUpdateDTO);
+        validateDate(gameUpdateDTO);
     }
 
     /**

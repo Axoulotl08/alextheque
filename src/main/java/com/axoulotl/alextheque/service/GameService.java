@@ -68,6 +68,9 @@ public class GameService {
                 .name(gameDTO.getName())
                 .console(console)
                 .inbox(gameDTO.getInbox())
+                .gameTime(0L)
+                .startDate(null)
+                .endDate(null)
                 .build();
 
         try {
@@ -134,7 +137,7 @@ public class GameService {
         game.setStartDate(gameUpdateDTO.getStartDate());
 
         try {
-            gameRepository.save(game);
+            game = gameRepository.save(game);
         } catch (Exception e) {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "An error occurred while trying to save in DB.");
         }
