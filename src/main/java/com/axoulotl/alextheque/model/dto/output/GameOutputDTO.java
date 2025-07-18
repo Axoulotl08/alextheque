@@ -1,5 +1,6 @@
 package com.axoulotl.alextheque.model.dto.output;
 
+import com.axoulotl.alextheque.model.entity.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,4 +19,5 @@ public class GameOutputDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private Long gameTime;
+    private Status status;
 }

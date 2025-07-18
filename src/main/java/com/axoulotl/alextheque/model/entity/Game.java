@@ -51,6 +51,10 @@ public class Game {
     @Column(name = "game_endDate")
     private LocalDate endDate;
 
-    @Column(name = " gameTime")
+    @Column(name = "game_Time")
     private Long gameTime;
+
+    @ManyToOne
+    @Column(name = "game_status")
+    private Status status;
 }
