@@ -1,5 +1,6 @@
 package com.axoulotl.alextheque.model.entity;
 
+import com.axoulotl.alextheque.model.entity.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,7 +55,7 @@ public class Game {
     @Column(name = "game_Time")
     private Long gameTime;
 
-    @ManyToOne
-    @Column(name = "game_status")
+    @Column(name = "game_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
 }

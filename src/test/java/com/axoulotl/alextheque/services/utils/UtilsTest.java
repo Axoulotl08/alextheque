@@ -1,9 +1,12 @@
 package com.axoulotl.alextheque.services.utils;
 
+import com.axoulotl.alextheque.model.dto.input.GameDTO;
+import com.axoulotl.alextheque.model.dto.input.GameUpdateDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.model.entity.enums.Zone;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UtilsTest{
@@ -36,5 +39,21 @@ public class UtilsTest{
                 .zone(Zone.JAP)
                 .creationDate(LocalDateTime.now().minusHours(3))
                 .build();
+    }
+
+    public static GameDTO createGameDTO(Integer consoleId){
+        GameDTO dto = new GameDTO();
+        dto.setName("TestDTO");
+        dto.setConsole(consoleId);
+        dto.setInbox(true);
+        return dto;
+    }
+
+    public static GameUpdateDTO createUpdateDTO(){
+        GameUpdateDTO dto = new GameUpdateDTO();
+        dto.setStartDate(LocalDate.now().minusMonths(2));
+        dto.setEndDate(LocalDate.now());
+        dto.setGameTime(100L);
+        return dto;
     }
 }

@@ -9,12 +9,26 @@ import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Service
 public class GameValidationService {
+    /**
+     * Validate all the DTO data through many method
+     *
+     * @param gameDTO - The gameDTO in entry
+     * @throws AlexthequeStandardError if there is any error during the validation of the DTO.
+     */
     public void validateGameInsert(GameDTO gameDTO) throws AlexthequeStandardError {
+        validateDTO(gameDTO);
         validateGameName(gameDTO);
         validateGameConsole(gameDTO);
+    }
+
+    private static void validateDTO(GameDTO gameDTO) throws AlexthequeStandardError {
+        if(Objects.isNull(gameDTO)){
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The GameDTO should not be null.");
+        }
     }
 
     /**
@@ -25,7 +39,7 @@ public class GameValidationService {
      */
     private void validateGameConsole(GameDTO gameDTO) throws AlexthequeStandardError {
         if(gameDTO.getConsole() <= 0){
-            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "Console Id should be greater than 0");
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "Console Id should be greater than 0.");
         }
     }
 
@@ -37,7 +51,7 @@ public class GameValidationService {
      */
     private void validateGameName(GameDTO gameDTO) throws AlexthequeStandardError {
         if(StringUtils.isBlank(gameDTO.getName())) {
-            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "Le nom ne doit pas être nul");
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The name should not be empty or null.");
         }
     }
 
@@ -48,6 +62,9 @@ public class GameValidationService {
      * @throws AlexthequeStandardError if any field is not validate
      */
     public void validateGameUpdate(GameUpdateDTO gameUpdateDTO) throws AlexthequeStandardError {
+        if(Objects.isNull(gameUpdateDTO)){
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The Update DTO should not be null.");
+        }
         if(gameUpdateDTO.getGameTime() != null) validateGameTime(gameUpdateDTO);
         validateDate(gameUpdateDTO);
     }
@@ -87,8 +104,11 @@ public class GameValidationService {
      * @throws AlexthequeStandardError if there is an error in a date
      */
     private void validateEndDate(GameUpdateDTO gameUpdateDTO) throws AlexthequeStandardError {
+        if(gameUpdateDTO.getEndDate().isBefore(gameUpdateDTO.getStartDate())){
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The end date should be after the start date.");
+        }
         if(gameUpdateDTO.getEndDate().isAfter(LocalDate.now())){
-            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The end date should not be in the future.");
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The end date should be before or today.");
         }
     }
 
@@ -99,7 +119,7 @@ public class GameValidationService {
      */
     private void validateStartDate(GameUpdateDTO gameUpdateDTO) throws AlexthequeStandardError {
         if(gameUpdateDTO.getStartDate().isAfter(LocalDate.now())){
-            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "StartDate should not be in the future.");
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The start date should be before or today.");
         }
     }
 }

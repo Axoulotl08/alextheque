@@ -1,13 +1,11 @@
 package com.axoulotl.alextheque.services.converter;
 
 import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
-import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
 import com.axoulotl.alextheque.services.utils.UtilsTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;

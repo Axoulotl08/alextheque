@@ -8,6 +8,7 @@ import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
 import com.axoulotl.alextheque.model.dto.output.GamesOutputDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.Game;
+import com.axoulotl.alextheque.model.entity.enums.Status;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.repository.GameRepository;
 import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
@@ -71,6 +72,7 @@ public class GameService {
                 .gameTime(0L)
                 .startDate(null)
                 .endDate(null)
+                .status(Status.TO_START)
                 .build();
 
         try {

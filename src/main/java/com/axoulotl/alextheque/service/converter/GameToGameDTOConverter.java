@@ -24,12 +24,14 @@ public class GameToGameDTOConverter {
                 .startDate(game.getStartDate())
                 .gameTime(game.getGameTime())
                 .endDate(game.getEndDate())
+                .status(game.getStatus())
                 .console(ConsoleOutputDTO.builder()
                         .launchDate(game.getConsole().getLaunchDate())
                         .name(game.getConsole().getName())
                         .manufacturer(game.getConsole().getManufacturer())
                         .zone(game.getConsole().getZone())
                         .creationDate(game.getConsole().getCreationDate())
+                        .id(game.getConsole().getId())
                         .build())
                 .build();
     }
