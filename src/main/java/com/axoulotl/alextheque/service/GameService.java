@@ -4,7 +4,6 @@ import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.dto.input.GameUpdateDTO;
-import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
 import com.axoulotl.alextheque.model.dto.output.GamesOutputDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.Game;
@@ -15,21 +14,15 @@ import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
 import com.axoulotl.alextheque.service.validation.GameValidationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 @Service
 public class GameService {
 
-    private static Integer NB_GAME_PER_PAGES = 10;
 
     GameRepository gameRepository;
     GameValidationService gameValidationService;
@@ -57,7 +50,7 @@ public class GameService {
     public ResponseEntity<Object> addGame(GameDTO gameDTO) throws AlexthequeStandardError {
         gameValidationService.validateGameInsert(gameDTO);
 
-        Console console = new Console();
+        Console console;
         try{
             console = consoleRepository.getReferenceById(gameDTO.getConsole());
         }

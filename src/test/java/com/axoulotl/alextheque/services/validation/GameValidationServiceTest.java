@@ -28,7 +28,7 @@ public class GameValidationServiceTest {
     @Test
     @Order(1)
     @DisplayName("Normal uses case")
-    void whenValidateGameInsertDTO_GivenValidGameDTO_thenNoExceptionThrown() throws AlexthequeStandardError {
+    void whenValidateGameInsertDTO_GivenValidGameDTO_thenNoExceptionThrown() {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setConsole(1);
         gameDTO.setName("Test");
@@ -41,7 +41,7 @@ public class GameValidationServiceTest {
     @Test
     @Order(2)
     @DisplayName("Insert Game with Wring name")
-    void whenValidateGameInsertDTO_GivenDTOWithWrongName_thenExceptionIsThrown() throws AlexthequeStandardError{
+    void whenValidateGameInsertDTO_GivenDTOWithWrongName_thenExceptionIsThrown() {
         GameDTO gameDTO = UtilsTest.createGameDTO(1);
 
         gameDTO.setName("   ");
@@ -56,7 +56,7 @@ public class GameValidationServiceTest {
     @Test
     @Order(3)
     @DisplayName("Insert Game with Wrong Console Id")
-    void whenValidateGameInsertDTO_GivenDTOWithWrongConsoleId_theExceptionIsThrown() throws AlexthequeStandardError{
+    void whenValidateGameInsertDTO_GivenDTOWithWrongConsoleId_theExceptionIsThrown() {
         GameDTO gameDTO = UtilsTest.createGameDTO(0);
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class,
@@ -69,7 +69,7 @@ public class GameValidationServiceTest {
     @Test
     @Order(4)
     @DisplayName("Insert Game with null DTO")
-    void whenValidateGameInsertDTO_GivenNullDTO_thenExceptionIsThrown() throws AlexthequeStandardError{
+    void whenValidateGameInsertDTO_GivenNullDTO_thenExceptionIsThrown() {
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class,
                 () -> validationService.validateGameInsert(null));
@@ -91,7 +91,7 @@ public class GameValidationServiceTest {
     @Test
     @Order(6)
     @DisplayName("Update Game : With Start date in future")
-    void whenValidateUpdateDTO_givenDTOWithStartDateInFuture_thenExceptionIsThrown() throws AlexthequeStandardError{
+    void whenValidateUpdateDTO_givenDTOWithStartDateInFuture_thenExceptionIsThrown() {
         GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
 
         gameUpdateDTO.setStartDate(LocalDate.now().plusDays(3));
@@ -106,7 +106,7 @@ public class GameValidationServiceTest {
     @Test
     @Order(7)
     @DisplayName("Update Game : With end date but no start date")
-    void whenValidateUpdateDTO_givenDTOWithEndDateButNoStartDate_thenExceptionIsThrown() throws AlexthequeStandardError{
+    void whenValidateUpdateDTO_givenDTOWithEndDateButNoStartDate_thenExceptionIsThrown() {
         GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
         gameUpdateDTO.setStartDate(null);
 
@@ -120,7 +120,7 @@ public class GameValidationServiceTest {
     @Test
     @Order(8)
     @DisplayName("Update Game : With end date before start date")
-    void whenValidateUpdateDTO_givenDTOEndDateBeforeThanStartDate_thenExceptionIsThrown() throws AlexthequeStandardError{
+    void whenValidateUpdateDTO_givenDTOEndDateBeforeThanStartDate_thenExceptionIsThrown() {
         GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
         gameUpdateDTO.setStartDate(LocalDate.now());
         gameUpdateDTO.setEndDate(LocalDate.now().minusDays(10));
@@ -135,7 +135,7 @@ public class GameValidationServiceTest {
     @Test
     @Order(9)
     @DisplayName("Update Game : Negative game time")
-    void whenValidateUpdateDTO_givenDTOWithNegativeGameTime_thenExceptionIsThrown() throws AlexthequeStandardError{
+    void whenValidateUpdateDTO_givenDTOWithNegativeGameTime_thenExceptionIsThrown() {
         GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
 
         gameUpdateDTO.setGameTime(-1L);
@@ -150,7 +150,7 @@ public class GameValidationServiceTest {
     @Test
     @Order(10)
     @DisplayName("Update Game : With end date in future")
-    void whenValidateUpdateDTO_givenDTOWithEndDateInFuture_thenExceptionIsThrown() throws AlexthequeStandardError{
+    void whenValidateUpdateDTO_givenDTOWithEndDateInFuture_thenExceptionIsThrown() {
         GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
 
         gameUpdateDTO.setEndDate(LocalDate.now().plusDays(3));
