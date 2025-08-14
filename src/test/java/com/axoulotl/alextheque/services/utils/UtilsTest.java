@@ -4,6 +4,7 @@ import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.dto.input.GameUpdateDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.Game;
+import com.axoulotl.alextheque.model.entity.enums.Status;
 import com.axoulotl.alextheque.model.entity.enums.Zone;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public class UtilsTest{
                 .inbox(true)
                 .console(createConsole(id))
                 .creationDate(LocalDateTime.now().minusHours(2))
+                .status(Status.TO_START)
                 .build();
     }
 
@@ -26,6 +28,7 @@ public class UtilsTest{
                 .name("Test" + id)
                 .id(id)
                 .inbox(true)
+                .status(Status.TO_START)
                 .console(console)
                 .creationDate(LocalDateTime.now().minusHours(2))
                 .build();

@@ -1,7 +1,6 @@
 package com.axoulotl.alextheque.GameTest;
 
 import com.axoulotl.alextheque.TestContenerTestConfig;
-import com.axoulotl.alextheque.model.dto.input.ConsoleDTO;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.Game;

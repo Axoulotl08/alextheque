@@ -39,19 +39,19 @@ public class GameController {
             @ApiResponse(responseCode = "400",
                     description = "An error occurred while trying to add the game",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
                 }),
             @ApiResponse(responseCode = "500",
                     description = "A database error occurred while trying to add the game",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
             })
     })
     @PostMapping("/game")
     public ResponseEntity<Object> addGame(@RequestBody GameDTO gameDTO) {
         ResponseEntity<Object> responseEntity = null;
         try{
-            responseEntity =  gameService.addGame(gameDTO);
+            responseEntity =  ResponseEntity.ok().body(gameService.addGame(gameDTO));
         }
         catch (AlexthequeStandardError ex){
             if(ex.getError() == StandardErrorEnum.ERROR_INPUT)
@@ -72,12 +72,12 @@ public class GameController {
             @ApiResponse(responseCode = "400",
                     description = "An error occurred while trying to get the game",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
                     }),
             @ApiResponse(responseCode = "500",
                     description = "A database error occurred while trying to get the game",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
                     })
     })
     @GetMapping("/game")
@@ -87,7 +87,9 @@ public class GameController {
         ResponseEntity<Object> responseEntity;
 
         try{
-            responseEntity = gameService.getAllGames(page, size);
+            responseEntity = ResponseEntity.ok().body(gameService.getAllGames(page, size));
+        } catch (AlexthequeStandardError ex){
+            responseEntity = ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
         } catch (Exception ex){
             responseEntity = ResponseEntity.internalServerError().build();
         }
@@ -104,19 +106,19 @@ public class GameController {
             @ApiResponse(responseCode = "400",
                     description = "An error occurred while trying to get the game",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
                     }),
             @ApiResponse(responseCode = "500",
                     description = "A database error occurred while trying to get the game",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
                     })
     })
     @GetMapping("/game/{id}")
     public ResponseEntity<Object> getGameById(@PathVariable Integer id) {
         ResponseEntity<Object> responseEntity;
         try {
-            responseEntity = gameService.getGameFromId(id);
+            responseEntity = ResponseEntity.ok().body(gameService.getGameFromId(id));
         } catch (AlexthequeStandardError ex) {
             responseEntity = ResponseEntity.internalServerError().body(new ErrorDTO(ex.getComment(), ex.getError()));
         }
@@ -133,12 +135,12 @@ public class GameController {
             @ApiResponse(responseCode = "400",
                     description = "An error occurred while trying to get the game",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
                     }),
             @ApiResponse(responseCode = "500",
                     description = "A database error occurred while trying to get the game",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = AlexthequeStandardError.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
                     })
     })
     @PatchMapping("/game/{id}")
@@ -146,7 +148,7 @@ public class GameController {
                                                  @RequestBody GameUpdateDTO gameUpdateDTO){
         ResponseEntity<Object> responseEntity = null;
         try{
-            responseEntity =  gameService.updateGameFromId(id, gameUpdateDTO);
+            responseEntity =  ResponseEntity.ok().body(gameService.updateGameFromId(id, gameUpdateDTO));
         }
         catch (AlexthequeStandardError ex){
             if(ex.getError() == StandardErrorEnum.ERROR_INPUT)
