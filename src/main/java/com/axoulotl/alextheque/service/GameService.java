@@ -3,31 +3,27 @@ package com.axoulotl.alextheque.service;
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
+import com.axoulotl.alextheque.model.dto.input.GameUpdateDTO;
 import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
 import com.axoulotl.alextheque.model.dto.output.GamesOutputDTO;
 import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.Game;
+import com.axoulotl.alextheque.model.entity.enums.Status;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.repository.GameRepository;
 import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
 import com.axoulotl.alextheque.service.validation.GameValidationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 @Service
 public class GameService {
 
-    private static Integer NB_GAME_PER_PAGES = 10;
 
     GameRepository gameRepository;
     GameValidationService gameValidationService;
@@ -52,10 +48,10 @@ public class GameService {
      * @return the entity created in database
      * @throws AlexthequeStandardError in case of technical or functional error
      */
-    public ResponseEntity<Object> addGame(GameDTO gameDTO) throws AlexthequeStandardError {
+    public GameOutputDTO addGame(GameDTO gameDTO) throws AlexthequeStandardError {
         gameValidationService.validateGameInsert(gameDTO);
 
-        Console console = new Console();
+        Console console;
         try{
             console = consoleRepository.getReferenceById(gameDTO.getConsole());
         }
@@ -67,35 +63,40 @@ public class GameService {
                 .name(gameDTO.getName())
                 .console(console)
                 .inbox(gameDTO.getInbox())
+                .gameTime(0L)
+                .startDate(null)
+                .endDate(null)
+                .status(Status.TO_START)
                 .build();
 
         try {
-            gameRepository.save(game);
+            game = gameRepository.save(game);
         } catch (Exception e) {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "An error occurred while trying to save in DB.");
         }
 
-        // Convert and return entity
-        return ResponseEntity.ok(converter.gameToGameDTO(game));
+        return converter.gameToGameDTO(game);
     }
 
     /**
      * Return all the game in DB.
+     * Ordered by Game.name descending
      *
      * @return all the page of game
      */
-    public ResponseEntity<Object> getAllGames(int page, int size){
+    public GamesOutputDTO getAllGames(int page, int size) throws AlexthequeStandardError {
+
+        gameValidationService.validatePageAndSize(page, size);
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Game> games = gameRepository.findAllByOrderByNameDesc(pageable);
 
-        GamesOutputDTO gamesOutputDTO = GamesOutputDTO.builder()
+        return GamesOutputDTO.builder()
                 .nbGames(games.getTotalElements())
                 .games(converter.gamesToListOfGames(games.getContent()))
                 .totalPages(games.getTotalPages())
                 .currentPage(page)
                 .build();
-        return ResponseEntity.ok().body(gamesOutputDTO);
     }
 
     /**
@@ -103,7 +104,7 @@ public class GameService {
      *
      * @return - the gameDTO
      */
-    public ResponseEntity<Object> getGameFromId(Integer id) throws AlexthequeStandardError {
+    public GameOutputDTO getGameFromId(Integer id) throws AlexthequeStandardError {
 
         Game game;
         try{
@@ -113,6 +114,31 @@ public class GameService {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "Game id Id : " + id + " dosn't exist");
         }
 
-        return ResponseEntity.ok(converter.gameToGameDTO(game));
+        return converter.gameToGameDTO(game);
+    }
+
+
+    public GameOutputDTO updateGameFromId(Integer id, GameUpdateDTO gameUpdateDTO) throws AlexthequeStandardError{
+        gameValidationService.validateGameUpdate(gameUpdateDTO);
+
+        Game game;
+        try{
+            game = gameRepository.getReferenceById(id);
+        }
+        catch (EntityNotFoundException ex){
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "Game id Id : " + id + " dosn't exist");
+        }
+
+        game.setGameTime(gameUpdateDTO.getGameTime());
+        game.setEndDate(gameUpdateDTO.getEndDate());
+        game.setStartDate(gameUpdateDTO.getStartDate());
+
+        try {
+            game = gameRepository.save(game);
+        } catch (Exception e) {
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "An error occurred while trying to save in DB.");
+        }
+
+        return converter.gameToGameDTO(game);
     }
 }
