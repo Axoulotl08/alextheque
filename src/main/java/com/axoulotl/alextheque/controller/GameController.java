@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,7 @@ public class GameController {
             })
     })
     @PostMapping("/game")
-    public ResponseEntity<Object> addGame(@RequestBody GameDTO gameDTO) {
+    public ResponseEntity<Object> addGame(@Valid @RequestBody GameDTO gameDTO) {
         ResponseEntity<Object> responseEntity = null;
         try{
             responseEntity =  ResponseEntity.ok().body(gameService.addGame(gameDTO));
@@ -158,4 +159,5 @@ public class GameController {
         }
         return responseEntity;
     }
+
 }

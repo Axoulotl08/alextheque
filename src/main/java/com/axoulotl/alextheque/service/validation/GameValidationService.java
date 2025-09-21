@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Service
+@Deprecated
 public class GameValidationService {
     /**
      * Validate all the DTO data through many method

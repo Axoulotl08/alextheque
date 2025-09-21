@@ -40,9 +40,6 @@ public class GameServiceTest {
     ConsoleRepository consoleRepository;
 
     @Mock
-    GameValidationService gameValidationService;
-
-    @Mock
     GameToGameDTOConverter converter;
 
     @InjectMocks
@@ -71,19 +68,6 @@ public class GameServiceTest {
     }
 
     @Test
-    void whenAddGame_GivenDtoWithWrongField_ThenExceptionIsThrown() throws AlexthequeStandardError{
-        GameDTO gameDTO = UtilsTest.createGameDTO(1);
-        gameDTO.setName("");
-
-        doThrow(new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The name should not be empty or null."))
-                .when(gameValidationService).validateGameInsert(gameDTO);
-
-        AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> gameService.addGame(gameDTO));
-
-        verify(gameRepository, never()).save(any(Game.class));
-    }
-
-    @Test
     void whenAddGame_GivenDTOButBDDError_thenExceptionIsThrown(){
         GameDTO gameDTO = UtilsTest.createGameDTO(1);
 
@@ -98,8 +82,8 @@ public class GameServiceTest {
 
     @Test
     void whenGetGame_WithGoodData_thenGamesAreReturned() throws AlexthequeStandardError {
-        Integer page = 1;
-        Integer size = 10;
+        int page = 1;
+        int size = 10;
         Pageable pageable = PageRequest.of(page, size);
 
         Game game = new Game();

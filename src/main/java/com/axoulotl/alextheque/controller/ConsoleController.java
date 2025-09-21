@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class ConsoleController {
             })
     })
     @PostMapping("/console")
-    public ResponseEntity<Object> addConsole(@RequestBody ConsoleDTO consoleDTO){
+    public ResponseEntity<Object> addConsole(@Valid @RequestBody ConsoleDTO consoleDTO){
         ResponseEntity<Object> responseEntity = null;
         try {
             responseEntity =  ResponseEntity.ok(consoleService.addConsole(consoleDTO));
@@ -65,11 +66,6 @@ public class ConsoleController {
                     description = "Successfully added the console to the collection",
                     content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ConsoleOutputDTO.class))
-                    }),
-            @ApiResponse(responseCode = "400",
-                    description = "An error occurred while trying to add the console",
-                    content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
                     }),
             @ApiResponse(responseCode = "500",
                     description = "An technical error occurred while trying to add the console",

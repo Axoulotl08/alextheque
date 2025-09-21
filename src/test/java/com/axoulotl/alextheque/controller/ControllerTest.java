@@ -1,13 +1,17 @@
-package com.axoulotl.alextheque.ConsoleControllerTest;
+package com.axoulotl.alextheque.controller;
 
 import com.axoulotl.alextheque.TestContenerTestConfig;
 import com.axoulotl.alextheque.model.dto.input.ConsoleDTO;
+import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.entity.Console;
+import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.model.entity.enums.Zone;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.repository.GameRepository;
+import com.axoulotl.alextheque.services.utils.UtilsTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,9 +35,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class ConsoleControllerTest extends TestContenerTestConfig {
+public class ControllerTest extends TestContenerTestConfig {
 
     private static final String CONSOLE = "/api/v1/console";
+    private static final String GAME = "/api/v1/game";
+    private static final String SEARCH = "/api/v1/search";
 
     @Autowired
     ConsoleRepository consoleRepository;
@@ -54,6 +61,8 @@ public class ConsoleControllerTest extends TestContenerTestConfig {
     public void setup() {
         mapper.registerModule(new JavaTimeModule());
     }
+
+
 
     @Test
     public void whenAddConsole_GivenGoodDTO_thenRespondWith200() throws Exception {
@@ -127,5 +136,70 @@ public class ConsoleControllerTest extends TestContenerTestConfig {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name").value("Name"))
                 .andExpect(jsonPath("$[1].manufacturer").value("Manuf2"));
+    }
+
+    @Test
+    public void whenAddGame_GivenGoodDTO_thenRespondWith200() throws Exception {
+        Console console = consoleRepository.save(UtilsTest.createConsole(1));
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setInbox(true);
+        gameDTO.setName("TestName");
+        gameDTO.setConsole(console.getId());
+
+        String json = mapper.writeValueAsString(gameDTO);
+
+        this.mockMvc.perform(post(GAME)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("TestName"))
+                .andExpect(jsonPath("$.console.name").value(console.getName()));
+    }
+
+    @Test
+    public void whenAddGame_GivenBlankName_thenResponseWith4XX() throws Exception{
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setName("");
+        gameDTO.setInbox(true);
+
+        String json = mapper.writeValueAsString(gameDTO);
+
+        this.mockMvc.perform(post(GAME)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void whenGetGame_GivenPageAndPageSize_thenResponseWith2XX() throws Exception{
+        Console console = UtilsTest.createConsole(1);
+        consoleRepository.save(console);
+
+        for(int i = 0; i <= 5; i++){
+            gameRepository.save(UtilsTest.createGameWithConsole(i, console));
+        }
+
+        int page = 0;
+        int size = 2;
+
+        this.mockMvc.perform(get(GAME)
+                        .param("page", String.valueOf(page))
+                        .param("size", String.valueOf(size)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    public void whenGetGame_GivenId_thenResponseWith2XX() throws Exception{
+        Integer gameId = 1;
+        Console console = consoleRepository.save(UtilsTest.createConsole(gameId));
+        gameRepository.save(UtilsTest.createGameWithConsole(gameId, console));
+
+        this.mockMvc.perform(get(GAME + "/" + gameId))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.id").value(gameId));
     }
 }

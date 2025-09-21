@@ -49,7 +49,7 @@ public class GameService {
      * @throws AlexthequeStandardError in case of technical or functional error
      */
     public GameOutputDTO addGame(GameDTO gameDTO) throws AlexthequeStandardError {
-        gameValidationService.validateGameInsert(gameDTO);
+//        gameValidationService.validateGameInsert(gameDTO);
 
         Console console;
         try{
