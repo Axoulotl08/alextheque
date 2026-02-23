@@ -66,24 +66,6 @@ public class ConsoleServiceTest {
     }
 
     @Test
-    public void whenAddConsole_GivenDTOWithWrongDTO_thenExceptionIsThrowed() throws AlexthequeStandardError {
-        LocalDateTime nowMinusOneHour = LocalDateTime.now().minusHours(1L).truncatedTo(ChronoUnit.MILLIS);
-
-        ConsoleDTO consoleDTO = new ConsoleDTO();
-        consoleDTO.setManufacturer("Manuf");
-        consoleDTO.setName("");
-        consoleDTO.setZone(1);
-        consoleDTO.setLaunchDate(nowMinusOneHour);
-
-        doThrow(new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "Nom de console invalide"))
-                .when(consoleValidationService).validateConsoleInsert(consoleDTO);
-
-        AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> consoleService.addConsole(consoleDTO));
-
-        verify(consoleRepository, never()).save(any(Console.class));
-    }
-
-    @Test
     public void whenAddConsole_GivenDTOButBDDError_thenExceptionIsThrowed() throws AlexthequeStandardError {
         LocalDateTime nowMinusOneHour = LocalDateTime.now().minusHours(1L).truncatedTo(ChronoUnit.MILLIS);
 

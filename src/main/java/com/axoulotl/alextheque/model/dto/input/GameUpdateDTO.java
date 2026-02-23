@@ -20,6 +20,6 @@ public class GameUpdateDTO {
     @ValidDate
     private LocalDate endDate;
 
-    @Min(value = 0, message = "Game time should be greater than 0")
+    @Min(value = 1, message = "Game time should be greater than 0")
     private Long gameTime;
 }

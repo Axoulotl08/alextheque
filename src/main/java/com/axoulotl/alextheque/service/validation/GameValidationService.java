@@ -122,15 +122,4 @@ public class GameValidationService {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The start date should be before or today.");
         }
     }
-
-
-    /**
-     * Validate both parameters of page and size
-     * Both should be superior to 0
-     *
-     * @param page
-     * @param size
-     */
-    public void validatePageAndSize(int page, int size) throws AlexthequeStandardError {
-    }
 }

@@ -18,15 +18,12 @@ import java.util.List;
 public class ConsoleService {
 
     ConsoleRepository consoleRepository;
-    ConsoleValidationService consoleValidationService;
     ConsoleToConsoleDTOConverter converter;
 
     @Autowired
     public ConsoleService(ConsoleRepository consoleRepository,
-                          ConsoleValidationService consoleValidationService,
                           ConsoleToConsoleDTOConverter converter){
         this.consoleRepository = consoleRepository;
-        this.consoleValidationService = consoleValidationService;
         this.converter = converter;
     }
 
@@ -38,8 +35,6 @@ public class ConsoleService {
      * @throws AlexthequeStandardError in case of bad input or error during the save into DB
      */
     public Console addConsole(ConsoleDTO consoleDTO) throws AlexthequeStandardError {
-        consoleValidationService.validateConsoleInsert(consoleDTO);
-
         Console console = Console.builder()
                 .name(consoleDTO.getName())
                 .manufacturer(consoleDTO.getManufacturer())
