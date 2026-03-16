@@ -41,7 +41,7 @@ public class GameSpecifications {
 
     private static Specification<Game> hadStartedBefore(LocalDate startedDate){
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.lessThan(root.get("startedDate"), startedDate);
+                criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), startedDate);
     }
 
     public static Specification<Game> getSpecification(SearchGameDTO searchGameDTO) {
