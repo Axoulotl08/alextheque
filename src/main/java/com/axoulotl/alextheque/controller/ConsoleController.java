@@ -13,20 +13,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class ConsoleController {
 
-    ConsoleService consoleService;
-
-    @Autowired
-    public ConsoleController(ConsoleService consoleService){
-        this.consoleService = consoleService;
-    }
+    private final ConsoleService consoleService;
 
     @Operation(summary = "Add a console in collection")
     @ApiResponses(value = {
