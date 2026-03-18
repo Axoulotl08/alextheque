@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+@Sql(scripts = "/sql/init-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class SearchControllerTest extends TestContenerConfig {
     private static final String SEARCH = "/api/v1/search/game";
 
@@ -24,5 +26,8 @@ public class SearchControllerTest extends TestContenerConfig {
     public void setup() {}
 
     @Test
-    public void searchGameTest() throws Exception {}
+    public void whenSearchGame_givenSearchDTO_thenResponseWith200AndGameMatchingSearch() throws Exception {
+
+
+    }
 }

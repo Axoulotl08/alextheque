@@ -38,7 +38,6 @@ public class GameControllerTest extends TestContenerConfig {
 
     @Test
     void contextLoads(){
-
     }
 
     @BeforeEach
