@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,32 +34,31 @@ public class GameController {
     @Operation(summary = "Add a new game in collection")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-            description = "Successfully added the game to the collection",
-            content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = GameOutputDTO.class))
-            }),
+                    description = "Successfully added the game to the collection",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GameOutputDTO.class))
+                    }),
             @ApiResponse(responseCode = "400",
                     description = "An error occurred while trying to add the game",
                     content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
-                }),
+                    }),
             @ApiResponse(responseCode = "500",
                     description = "A database error occurred while trying to add the game",
                     content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))
-            })
+                    })
     })
     @PostMapping("/game")
     public ResponseEntity<Object> addGame(@Valid @RequestBody GameDTO gameDTO) {
         ResponseEntity<Object> responseEntity = null;
-        try{
-            responseEntity =  ResponseEntity.ok().body(gameService.addGame(gameDTO));
-        }
-        catch (AlexthequeStandardError ex){
-            if(ex.getError() == StandardErrorEnum.ERROR_INPUT)
-                responseEntity =  ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
-            if(ex.getError() == StandardErrorEnum.ERROR_DATABASE)
-                responseEntity =  ResponseEntity.internalServerError().body(new ErrorDTO(ex.getComment(), ex.getError()));
+        try {
+            responseEntity = ResponseEntity.ok().body(gameService.addGame(gameDTO));
+        } catch (AlexthequeStandardError ex) {
+            if (ex.getError() == StandardErrorEnum.ERROR_INPUT)
+                responseEntity = ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
+            if (ex.getError() == StandardErrorEnum.ERROR_DATABASE)
+                responseEntity = ResponseEntity.internalServerError().body(new ErrorDTO(ex.getComment(), ex.getError()));
         }
         return responseEntity;
     }
@@ -83,15 +83,15 @@ public class GameController {
     })
     @GetMapping("/game")
     public ResponseEntity<Object> getAllGames(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "15") int size){
+            @PositiveOrZero @RequestParam(value = "page", defaultValue = "0") int page,
+            @PositiveOrZero @RequestParam(value = "size", defaultValue = "15") int size) {
         ResponseEntity<Object> responseEntity;
 
-        try{
+        try {
             responseEntity = ResponseEntity.ok().body(gameService.getAllGames(page, size));
-        } catch (AlexthequeStandardError ex){
+        } catch (AlexthequeStandardError ex) {
             responseEntity = ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
-        } catch (Exception ex){
+        } catch (Exception ex) {
             responseEntity = ResponseEntity.internalServerError().build();
         }
         return responseEntity;
@@ -116,7 +116,7 @@ public class GameController {
                     })
     })
     @GetMapping("/game/{id}")
-    public ResponseEntity<Object> getGameById(@PathVariable Integer id) {
+    public ResponseEntity<Object> getGameById(@PositiveOrZero @PathVariable Integer id) {
         ResponseEntity<Object> responseEntity;
         try {
             responseEntity = ResponseEntity.ok().body(gameService.getGameFromId(id));
@@ -145,17 +145,17 @@ public class GameController {
                     })
     })
     @PatchMapping("/game/{id}")
-    public ResponseEntity<Object> updateGameById(@PathVariable Integer id,
-                                                 @RequestBody GameUpdateDTO gameUpdateDTO){
+    public ResponseEntity<Object> updateGameById(
+            @PositiveOrZero @PathVariable Integer id,
+            @Valid @RequestBody GameUpdateDTO gameUpdateDTO) {
         ResponseEntity<Object> responseEntity = null;
-        try{
-            responseEntity =  ResponseEntity.ok().body(gameService.updateGameFromId(id, gameUpdateDTO));
-        }
-        catch (AlexthequeStandardError ex){
-            if(ex.getError() == StandardErrorEnum.ERROR_INPUT)
-                responseEntity =  ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
-            if(ex.getError() == StandardErrorEnum.ERROR_DATABASE)
-                responseEntity =  ResponseEntity.internalServerError().body(new ErrorDTO(ex.getComment(), ex.getError()));
+        try {
+            responseEntity = ResponseEntity.ok().body(gameService.updateGameFromId(id, gameUpdateDTO));
+        } catch (AlexthequeStandardError ex) {
+            if (ex.getError() == StandardErrorEnum.ERROR_INPUT)
+                responseEntity = ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
+            if (ex.getError() == StandardErrorEnum.ERROR_DATABASE)
+                responseEntity = ResponseEntity.internalServerError().body(new ErrorDTO(ex.getComment(), ex.getError()));
         }
         return responseEntity;
     }

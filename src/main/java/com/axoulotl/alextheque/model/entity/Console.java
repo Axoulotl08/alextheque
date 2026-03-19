@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @Entity
 @Data
 @Builder
+@NoArgsConstructor
+//@Table(name = "Console")
 public class Console {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,11 +43,4 @@ public class Console {
     @Column(name = "console_zone", nullable = false)
     @Enumerated(EnumType.STRING)
     private Zone zone;
-
-    @OneToMany(mappedBy = "console")
-    private List<Game> gameList;
-
-    public Console() {
-        this.gameList = new ArrayList<>();
-    }
 }

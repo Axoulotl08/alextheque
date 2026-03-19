@@ -11,7 +11,6 @@ import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.repository.GameRepository;
 import com.axoulotl.alextheque.service.GameService;
 import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
-import com.axoulotl.alextheque.service.validation.GameValidationService;
 import com.axoulotl.alextheque.services.utils.UtilsTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

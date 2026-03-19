@@ -9,6 +9,7 @@ import com.axoulotl.alextheque.model.entity.enums.Status;
 import com.axoulotl.alextheque.repository.GameRepository;
 import com.axoulotl.alextheque.repository.specification.GameSpecifications;
 import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
+import jakarta.persistence.EntityManager;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,11 +23,14 @@ public class SearchService {
 
     GameRepository gameRepository;
     GameToGameDTOConverter converter;
+    EntityManager entityManager;
 
     @Autowired
-    public SearchService(GameRepository gameRepository, GameToGameDTOConverter converter) {
+    public SearchService(GameRepository gameRepository, GameToGameDTOConverter converter,
+                         EntityManager entityManager) {
         this.gameRepository = gameRepository;
         this.converter = converter;
+        this.entityManager = entityManager;
     }
 
     /**
@@ -35,8 +39,8 @@ public class SearchService {
      * @param searchGameDTO - The entry data with all the criteria to meet
      * @param page - The page to display
      * @param size - The number of result per page
-     * @return A Page of the right side with a list of game
-     * @throws AlexthequeStandardError - if any error happen during the proccess
+     * @return a {@link GamesOutputDTO} - which check all the search specification and matching the current pages
+     * @throws AlexthequeStandardError a {@link AlexthequeStandardError} - if any error happen during the proccess
      */
     public GamesOutputDTO searchGameWithCriteria(SearchGameDTO searchGameDTO, int page, int size) throws AlexthequeStandardError {
         Pageable pageable = PageRequest.of(page, size);
@@ -63,35 +67,7 @@ public class SearchService {
      * @return the page of the game matching the criteria
      */
     private Page<Game> getGamesByCriteria(SearchGameDTO searchGameDTO, Pageable pageable) {
-        Specification<Game> specifications = getSpecification(searchGameDTO);
-
+        Specification<Game> specifications = GameSpecifications.getSpecification(searchGameDTO);
         return gameRepository.findAll(specifications, pageable);
     }
-
-    /**
-     *
-     * @param searchGameDTO
-     * @return
-     */
-    private Specification<Game> getSpecification(SearchGameDTO searchGameDTO) {
-        Specification<Game> specification = Specification.where(null);
-        if(StringUtils.isNotBlank(searchGameDTO.getName())){
-            specification = specification.and(GameSpecifications.hasNameLike(searchGameDTO.getName()));
-        }
-
-        if(searchGameDTO.getConsoleId() != null && searchGameDTO.getConsoleId() != 0){
-            specification = specification.and(GameSpecifications.hasGameId(searchGameDTO.getConsoleId()));
-        }
-
-        if(searchGameDTO.getStartedAfter() != null){
-            specification = specification.and(GameSpecifications.hadStartedBefore(searchGameDTO.getStartedAfter()));
-        }
-
-        if(searchGameDTO.getStatusId() != null) {
-            specification = specification.and(GameSpecifications.hasStatus(Status.getStatusFromInt(searchGameDTO.getStatusId())));
-        }
-
-        return specification;
-    }
-
 }

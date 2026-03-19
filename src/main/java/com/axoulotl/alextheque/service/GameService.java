@@ -21,22 +21,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GameService {
 
 
     GameRepository gameRepository;
-    GameValidationService gameValidationService;
     ConsoleRepository consoleRepository;
     GameToGameDTOConverter converter;
 
     @Autowired
     public GameService(GameRepository gameRepository,
-                       GameValidationService gameValidationService,
                        ConsoleRepository consoleRepository,
                        GameToGameDTOConverter converter) {
         this.gameRepository = gameRepository;
-        this.gameValidationService = gameValidationService;
         this.consoleRepository = consoleRepository;
         this.converter = converter;
     }
@@ -49,11 +48,9 @@ public class GameService {
      * @throws AlexthequeStandardError in case of technical or functional error
      */
     public GameOutputDTO addGame(GameDTO gameDTO) throws AlexthequeStandardError {
-//        gameValidationService.validateGameInsert(gameDTO);
-
-        Console console;
+        Optional<Console> console;
         try{
-            console = consoleRepository.getReferenceById(gameDTO.getConsole());
+            console = consoleRepository.findById(gameDTO.getConsole());
         }
         catch (EntityNotFoundException ex){
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "There is no console with this ID.");
@@ -61,7 +58,7 @@ public class GameService {
 
         Game game = Game.builder()
                 .name(gameDTO.getName())
-                .console(console)
+                .console(console.get())
                 .inbox(gameDTO.getInbox())
                 .gameTime(0L)
                 .startDate(null)
@@ -85,9 +82,6 @@ public class GameService {
      * @return all the page of game
      */
     public GamesOutputDTO getAllGames(int page, int size) throws AlexthequeStandardError {
-
-        gameValidationService.validatePageAndSize(page, size);
-
         Pageable pageable = PageRequest.of(page, size);
         Page<Game> games = gameRepository.findAllByOrderByNameDesc(pageable);
 
@@ -106,21 +100,19 @@ public class GameService {
      */
     public GameOutputDTO getGameFromId(Integer id) throws AlexthequeStandardError {
 
-        Game game;
+        Optional<Game> game;
         try{
-            game = gameRepository.getReferenceById(id);
+            game = gameRepository.findById(id);
         }
         catch (EntityNotFoundException ex){
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "Game id Id : " + id + " dosn't exist");
         }
 
-        return converter.gameToGameDTO(game);
+        return converter.gameToGameDTO(game.get());
     }
 
 
     public GameOutputDTO updateGameFromId(Integer id, GameUpdateDTO gameUpdateDTO) throws AlexthequeStandardError{
-        gameValidationService.validateGameUpdate(gameUpdateDTO);
-
         Game game;
         try{
             game = gameRepository.getReferenceById(id);

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Builder
+//@Table(name = "Game")
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,10 +47,10 @@ public class Game {
     columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean inbox;
 
-    @Column(name = "game_startDate")
+    @Column(name = "game_start_date")
     private LocalDate startDate;
 
-    @Column(name = "game_endDate")
+    @Column(name = "game_end_date")
     private LocalDate endDate;
 
     @Column(name = "game_Time")

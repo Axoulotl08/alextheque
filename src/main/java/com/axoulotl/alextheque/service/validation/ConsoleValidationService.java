@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
+@Deprecated
 public class ConsoleValidationService {
     /**
      * Validate the entry DTO before conversion and save into DB
