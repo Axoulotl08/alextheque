@@ -46,6 +46,18 @@ public class GameDtoValidationTest {
     }
 
     @Test
+    @DisplayName("GameDTO Validator - Null Name")
+    void whenNameIsNull_thenViolations() {
+        GameDTO gameDTO = new GameDTO(null, 1, Boolean.TRUE);
+
+        Set<ConstraintViolation<GameDTO>> violations = validator.validate(gameDTO);
+
+        assertThat(violations).hasSize(1);
+        assertThat(violations).extracting(ConstraintViolation::getMessage)
+                .containsOnly("The game name should not be null or empty");
+    }
+
+    @Test
     @DisplayName("GameDTO Validator - Name Too Long")
     void whenNameTooLong_thenViolations() {
         GameDTO gameDTO = new GameDTO("A".repeat(260), 1, Boolean.FALSE);
