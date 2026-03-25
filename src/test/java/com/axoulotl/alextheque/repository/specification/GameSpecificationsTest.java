@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 
-@Sql(scripts = "/sql/init-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(scripts = "/sql/init-specification.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class GameSpecificationsTest extends TestContenerConfig {
 
     @Autowired

@@ -28,21 +28,16 @@ public class ConsoleServiceTest {
     @Mock
     private ConsoleRepository consoleRepository;
 
-    @Mock
-    private ConsoleValidationService consoleValidationService;
-
     @InjectMocks
     private ConsoleService consoleService;
 
+    private static final LocalDateTime nowMinusOneHour = LocalDateTime.now().minusHours(1L).truncatedTo(ChronoUnit.MILLIS);
+
     @Test
     public void whenAddConsole_GivenGoodDTO_thenConsoleIsSaved() throws AlexthequeStandardError {
-        LocalDateTime nowMinusOneHour = LocalDateTime.now().minusHours(1L).truncatedTo(ChronoUnit.MILLIS);
 
-        ConsoleDTO consoleDTO = new ConsoleDTO();
-        consoleDTO.setManufacturer("Manuf");
-        consoleDTO.setName("Name");
-        consoleDTO.setZone(1);
-        consoleDTO.setLaunchDate(nowMinusOneHour);
+
+        ConsoleDTO consoleDTO = new ConsoleDTO("Name", "Manuf", nowMinusOneHour, 1);
 
         Console console = new Console();
         console.setId(1);
@@ -67,13 +62,8 @@ public class ConsoleServiceTest {
 
     @Test
     public void whenAddConsole_GivenDTOButBDDError_thenExceptionIsThrowed() throws AlexthequeStandardError {
-        LocalDateTime nowMinusOneHour = LocalDateTime.now().minusHours(1L).truncatedTo(ChronoUnit.MILLIS);
 
-        ConsoleDTO consoleDTO = new ConsoleDTO();
-        consoleDTO.setManufacturer("Manuf");
-        consoleDTO.setName("");
-        consoleDTO.setZone(1);
-        consoleDTO.setLaunchDate(nowMinusOneHour);
+        ConsoleDTO consoleDTO = new ConsoleDTO("", "Manuf", nowMinusOneHour, 1);;
 
         Console console = new Console();
         console.setId(1);

@@ -1,28 +1,26 @@
 package com.axoulotl.alextheque.model.dto.input;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-public class ConsoleDTO {
+public record ConsoleDTO(
 
-    @NotBlank(message = "The console name should no be null")
-    @Size(min = 1, max = 255, message = "The console name should between 1 and 255 characters")
-    private String name;
+    @NotBlank(message = "The console name should not be null")
+    @Size(max = 255, message = "The console name should be between 1 and 255 characters")
+    String name,
 
-    @NotBlank(message = "The console manufacturer should no be null")
-    @Size(min = 1, max = 255, message = "The console manufacturer should between 1 and 255 characters")
-    private String manufacturer;
+    @NotBlank(message = "The console manufacturer should not be null")
+    @Size(max = 100, message = "The console manufacturer should be between 1 and 100 characters")
+    String manufacturer,
 
+    @PastOrPresent(message = "The console launch date should not be in the future")
     @NotNull(message = "The console launch date should not be null")
-    private LocalDateTime launchDate;
+    LocalDateTime launchDate,
 
     @NotNull(message = "The console zone should not be null")
-    private Integer zone;
+    @Min(value = 1, message = "The zone should be between 1 and 3")
+    @Max(value = 3, message = "The zone should be between 1 and 3")
+    Integer zone
+){
 }

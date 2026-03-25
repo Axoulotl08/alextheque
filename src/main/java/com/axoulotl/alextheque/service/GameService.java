@@ -50,16 +50,16 @@ public class GameService {
     public GameOutputDTO addGame(GameDTO gameDTO) throws AlexthequeStandardError {
         Optional<Console> console;
         try{
-            console = consoleRepository.findById(gameDTO.getConsole());
+            console = consoleRepository.findById(gameDTO.console());
         }
         catch (EntityNotFoundException ex){
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "There is no console with this ID.");
         }
 
         Game game = Game.builder()
-                .name(gameDTO.getName())
+                .name(gameDTO.name())
                 .console(console.get())
-                .inbox(gameDTO.getInbox())
+                .inbox(gameDTO.inbox())
                 .gameTime(0L)
                 .startDate(null)
                 .endDate(null)
@@ -121,9 +121,9 @@ public class GameService {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "Game id Id : " + id + " dosn't exist");
         }
 
-        game.setGameTime(gameUpdateDTO.getGameTime());
-        game.setEndDate(gameUpdateDTO.getEndDate());
-        game.setStartDate(gameUpdateDTO.getStartDate());
+        game.setGameTime(gameUpdateDTO.gameTime());
+        game.setEndDate(gameUpdateDTO.endDate());
+        game.setStartDate(gameUpdateDTO.startDate());
 
         try {
             game = gameRepository.save(game);

@@ -30,7 +30,7 @@
 		<testcontainers.version>1.21.0</testcontainers.version>
 
 		<sonar.host.url>http://localhost:9000</sonar.host.url>
-		<sonar.token>sqa_1d8ecd8862007c2f4faddf50e334519521e61505</sonar.token>
+		<sonar.token>sqp_b73d3b8175a2ad7d7b95af239486729113e11165</sonar.token>
 		<sonar.projectKey>Alextheque</sonar.projectKey>
 		<sonar.projectName>AlexTheque Back-End</sonar.projectName>
 		<sonar.projectVersion>1.0.0</sonar.projectVersion>
@@ -170,7 +170,8 @@
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>
 					<artifactId>sonar-maven-plugin</artifactId>
-					<version>3.11.0.3922</version> </plugin>
+					<version>3.11.0.3922</version>
+				</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

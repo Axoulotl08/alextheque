@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -49,11 +50,11 @@ public class GameServiceTest {
         Game game = UtilsTest.createGame(1);
         game.setName("TestDTO");
 
-        Console console = UtilsTest.createConsole(1);
+        Optional<Console> console = Optional.of(UtilsTest.createConsole(1));
 
         GameDTO gameDTO = UtilsTest.createGameDTO(1);
 
-        when(consoleRepository.getReferenceById(any(Integer.class))).thenReturn(console);
+        when(consoleRepository.findById(any(Integer.class))).thenReturn(console);
         when(gameRepository.save(any(Game.class))).thenReturn(game);
         when(converter.gameToGameDTO(any(Game.class))).thenCallRealMethod();
 

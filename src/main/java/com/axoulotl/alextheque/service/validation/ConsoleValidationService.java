@@ -30,7 +30,7 @@ public class ConsoleValidationService {
      * @throws AlexthequeStandardError if the zone is incorrect
      */
     private void validateConsoleZone(ConsoleDTO consoleDTO) throws AlexthequeStandardError {
-        if(consoleDTO.getZone() < 1 || consoleDTO.getZone() > 3){
+        if(consoleDTO.zone() < 1 || consoleDTO.zone() > 3){
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The Zone is incorrect. Should be between 1, 2 or 3.");
         }
     }
@@ -42,11 +42,11 @@ public class ConsoleValidationService {
      * @throws AlexthequeStandardError if the launch date is incorrect
      */
     private void validateConsoleLaunchDate(ConsoleDTO consoleDTO) throws AlexthequeStandardError {
-        if(consoleDTO.getLaunchDate().isAfter(LocalDateTime.now())){
+        if(consoleDTO.launchDate().isAfter(LocalDateTime.now())){
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The launch date should be before now.");
         }
 
-        if(consoleDTO.getLaunchDate().isBefore(LocalDateTime.of(1980, 1, 1, 1, 1))){
+        if(consoleDTO.launchDate().isBefore(LocalDateTime.of(1980, 1, 1, 1, 1))){
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The launch date should be after 01-01-1980.");
         }
     }
@@ -58,7 +58,7 @@ public class ConsoleValidationService {
      * @throws AlexthequeStandardError if the manufacturer is incorrect
      */
     private void validateConsoleManufacturer(ConsoleDTO consoleDTO) throws AlexthequeStandardError {
-        if(StringUtils.isBlank(consoleDTO.getManufacturer())){
+        if(StringUtils.isBlank(consoleDTO.manufacturer())){
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The manufacturer should not be empty of null.");
         }
     }
@@ -69,7 +69,7 @@ public class ConsoleValidationService {
      * @throws AlexthequeStandardError if the name is incorrect
      */
     private void validateConsoleName(ConsoleDTO consoleDTO) throws AlexthequeStandardError {
-        if(StringUtils.isBlank(consoleDTO.getName())){
+        if(StringUtils.isBlank(consoleDTO.name())){
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_INPUT, "The name should not be empty of null.");
         }
     }

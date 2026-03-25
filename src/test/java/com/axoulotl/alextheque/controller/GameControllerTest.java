@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+//TODO : Ajouter un SQL pour des consoles pour les tests
 public class GameControllerTest extends TestContenerConfig {
 
     private static final String GAME = "/api/v1/game";
@@ -55,10 +56,7 @@ public class GameControllerTest extends TestContenerConfig {
     @Test
     public void whenAddGame_GivenGoodDTO_thenRespondWith200() throws Exception {
         Console console = consoleRepository.findAll().getFirst();
-        GameDTO gameDTO = new GameDTO();
-        gameDTO.setInbox(Boolean.TRUE);
-        gameDTO.setName("TestName");
-        gameDTO.setConsole(console.getId());
+        GameDTO gameDTO = new GameDTO("TestName", console.getId(), Boolean.TRUE);
 
         String json = mapper.writeValueAsString(gameDTO);
 
@@ -73,9 +71,8 @@ public class GameControllerTest extends TestContenerConfig {
 
     @Test
     public void whenAddGame_GivenBlankName_thenResponseWith4XX() throws Exception{
-        GameDTO gameDTO = new GameDTO();
-        gameDTO.setName("");
-        gameDTO.setInbox(Boolean.TRUE);
+        Console console = consoleRepository.findAll().getFirst();
+        GameDTO gameDTO = new GameDTO("", console.getId(), Boolean.TRUE);
 
         String json = mapper.writeValueAsString(gameDTO);
 
