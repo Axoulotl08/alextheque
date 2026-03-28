@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Console Controller Test")
+@DisplayName("ConsoleController Test")
 public class ConsoleControllerTest extends TestContenerConfig {
 
     private static final String CONSOLE = "/api/v1/console";
@@ -74,7 +74,7 @@ public class ConsoleControllerTest extends TestContenerConfig {
     @Test
     @DisplayName("Console name is wring : 400")
     public void whenAddConsole_GivenWrongName_thenRespondWith400() throws Exception{
-        LocalDateTime now = LocalDateTime.now().minusYears(1L).truncatedTo(ChronoUnit.MICROS);;
+        LocalDateTime now = LocalDateTime.now().minusYears(1L).truncatedTo(ChronoUnit.MICROS);
 
         ConsoleDTO consoleDTO = new ConsoleDTO("", "TestManuf", now, 1);
 

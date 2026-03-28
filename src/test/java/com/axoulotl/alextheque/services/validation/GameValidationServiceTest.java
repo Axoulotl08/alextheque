@@ -6,8 +6,8 @@ import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.dto.input.GameUpdateDTO;
 import com.axoulotl.alextheque.service.validation.GameValidationService;
 import com.axoulotl.alextheque.services.utils.UtilsTest;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,14 +18,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Deprecated
-@Ignore
+@Disabled("Old test. Replaced by validator test.")
 public class GameValidationServiceTest {
     private GameValidationService validationService;
 
     private static final LocalDate now = LocalDate.now();
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         this.validationService = new GameValidationService();
     }
 

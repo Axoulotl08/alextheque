@@ -4,8 +4,8 @@ import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.ConsoleDTO;
 import com.axoulotl.alextheque.service.validation.ConsoleValidationService;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -15,11 +15,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Deprecated
-@Ignore
+@Disabled("Old test. Replaced by validator test.")
 public class ConsoleValidationServiceTest {
     private ConsoleValidationService consoleValidationService;
 
-    private static LocalDateTime now = LocalDateTime.now().minusYears(1).truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalDateTime now = LocalDateTime.now().minusYears(1).truncatedTo(ChronoUnit.MILLIS);
 
     @BeforeEach
     void setUp() {
@@ -27,7 +27,7 @@ public class ConsoleValidationServiceTest {
     }
 
     @Test
-    void whenValidateConsoleInsert_givenValidConsoleDTO_thenNoExceptionThrown() throws AlexthequeStandardError, AlexthequeStandardError {
+    void whenValidateConsoleInsert_givenValidConsoleDTO_thenNoExceptionThrown() throws AlexthequeStandardError {
         ConsoleDTO consoleDTO = new ConsoleDTO("Valid Console Name", "Valid Manuf", now, 1);
 
         consoleValidationService.validateConsoleInsert(consoleDTO);
@@ -38,9 +38,7 @@ public class ConsoleValidationServiceTest {
         // GIVEN
         ConsoleDTO consoleDTO = new ConsoleDTO("", "Valid Manuf", now, 1);
 
-        AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> {
-            consoleValidationService.validateConsoleInsert(consoleDTO);
-        });
+        AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> consoleValidationService.validateConsoleInsert(consoleDTO));
 
         assertThat(thrownException.getError()).isEqualTo(StandardErrorEnum.ERROR_INPUT);
         assertThat(thrownException.getComment()).contains("The name should not be empty of null.");
@@ -49,7 +47,8 @@ public class ConsoleValidationServiceTest {
 
     @Test
     void whenValidateConsoleInsert_givenConsoleDTOWithNullName_thenAlexthequeStandardErrorIsThrown() {
-        ConsoleDTO consoleDTO = new ConsoleDTO(null, "Valid Manuf", now, 1);;
+        ConsoleDTO consoleDTO = new ConsoleDTO(null, "Valid Manuf", now, 1);
+
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> {
             consoleValidationService.validateConsoleInsert(consoleDTO);
@@ -60,7 +59,7 @@ public class ConsoleValidationServiceTest {
     }
 
     @Test
-    void whenValidateConsoleInsert_givenConsoleDTOWithNullManufacturer_thenAlexthequeStandardErrorIsThrow(){
+    void whenValidateConsoleInsert_givenConsoleDTOWithNullManufacturer_thenAlexthequeStandardErrorIsThrow() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Valid Console Name", null, now, 1);
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> {
@@ -72,7 +71,7 @@ public class ConsoleValidationServiceTest {
     }
 
     @Test
-    void whenValidateConsoleInsert_givenConsoleDTOWithEmptyManufacturer_thenAlexthequeStandardErrorIsThrow(){
+    void whenValidateConsoleInsert_givenConsoleDTOWithEmptyManufacturer_thenAlexthequeStandardErrorIsThrow() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Valid Console Name", "", now, 1);
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> {
@@ -84,7 +83,7 @@ public class ConsoleValidationServiceTest {
     }
 
     @Test
-    void whenValidateConsoleInsert_givenConsoleDTOWithZoneIdNegative_thenAlexthequeStandardErrorIsThrow(){
+    void whenValidateConsoleInsert_givenConsoleDTOWithZoneIdNegative_thenAlexthequeStandardErrorIsThrow() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Valid Console Name", "Manuf", now, -1);
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> {
@@ -96,7 +95,7 @@ public class ConsoleValidationServiceTest {
     }
 
     @Test
-    void whenValidateConsoleInsert_givenConsoleDTOWithZoneIdOverThree_thenAlexthequeStandardErrorIsThrow(){
+    void whenValidateConsoleInsert_givenConsoleDTOWithZoneIdOverThree_thenAlexthequeStandardErrorIsThrow() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Valid Console Name", "Manuf", now, 445);
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> {
@@ -108,7 +107,7 @@ public class ConsoleValidationServiceTest {
     }
 
     @Test
-    void whenValidateConsoleInsert_givenConsoleDTOWithLaunchDateInFuture_thenAlexthequeStandardErrorIsThrow(){
+    void whenValidateConsoleInsert_givenConsoleDTOWithLaunchDateInFuture_thenAlexthequeStandardErrorIsThrow() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Valid Console Name", "Manuf", LocalDateTime.now().plusYears(1).truncatedTo(ChronoUnit.MILLIS), 1);
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> {
@@ -120,7 +119,7 @@ public class ConsoleValidationServiceTest {
     }
 
     @Test
-    void whenValidateConsoleInsert_givenConsoleDTOWithLaunchDateBefore1800_thenAlexthequeStandardErrorIsThrow(){
+    void whenValidateConsoleInsert_givenConsoleDTOWithLaunchDateBefore1800_thenAlexthequeStandardErrorIsThrow() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Valid Console Name", "Manuf", LocalDateTime.now().minusYears(50).truncatedTo(ChronoUnit.MILLIS), 1);
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> {

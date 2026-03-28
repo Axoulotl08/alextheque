@@ -32,6 +32,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO - All fields are valid")
     void whenAllFieldsValid_thenNoViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Test Console", "Manuf", now, zoneId);
 
@@ -41,6 +42,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator- Name is blank")
     void whenNameIsBlank_thenNoViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("", "Manuf", now, zoneId);
 
@@ -52,6 +54,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Name is null")
     void whenNameIsNull_thenNoViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("", "Manuf", now, zoneId);
 
@@ -63,6 +66,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Name is too long")
     void whenNameIsTooLong_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("A".repeat(256), "Manuf", now, zoneId);
 
@@ -74,6 +78,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Manufacturer is blank")
     void whenManufacturerIsBlank_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Test Console", "", now, zoneId);
 
@@ -85,6 +90,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Manufacturer is null")
     void whenManufacturerIsNull_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Test Console", null, now, zoneId);
 
@@ -97,6 +103,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Manufacturer is too long")
     void whenManufacturerIsTooLong_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Test Console", "A".repeat(101), now, zoneId);
 
@@ -108,6 +115,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Zone is null")
     void whenZoneIsNull_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Test Console", "Manuf", now, null);
 
@@ -119,6 +127,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Zone is under one")
     void whenZoneIsUnderOne_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Test Console", "Manuf", now, zoneIdTooLow);
 
@@ -130,6 +139,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Zone is above three")
     void whenZoneIsAboveThree_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Test Console", "Manuf", now, zoneIdTooHigh);
 
@@ -141,6 +151,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Date is null")
     void whenLaunchDateIsNull_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Test Console", "Manuf", null, zoneId);
 
@@ -153,6 +164,7 @@ public class ConsoleDtoValidationTest {
 
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Launch date is in future")
     void whenLaunchDateIsInFuture_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("Test Console", "Manuf", now.plusYears(2), zoneId);
 
@@ -164,6 +176,7 @@ public class ConsoleDtoValidationTest {
     }
 
     @Test
+    @DisplayName("ConsoleDTO Validator - Multiple fields are invalid")
     void whenMultipleFieldsInvalid_thenViolations() {
         ConsoleDTO consoleDTO = new ConsoleDTO("", "", now, null);
 

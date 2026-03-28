@@ -24,13 +24,14 @@ public class AtLeastOneFieldValidator implements ConstraintValidator<AtLeastOneF
 
         for (String field : this.fields) {
             Object value = beanWrapper.getPropertyValue(field);
-            if (value instanceof String stringValue){
-                if(StringUtils.isNotBlank(stringValue)){
+            if(value != null) {
+                if (value instanceof String stringValue) {
+                    if (StringUtils.isNotBlank(stringValue)) {
+                        return true;
+                    }
+                } else {
                     return true;
                 }
-            }
-            else{
-                return true;
             }
         }
         return false;

@@ -105,5 +105,15 @@ public class GameDtoValidationTest {
                 .containsOnly("The inbox value should not be null");
     }
 
+    @Test
+    @DisplayName("GameDTO Validator - Multiples fields are invalid")
+    void whenMultipleFieldsAreInvalid_thenViolations() {
+        GameDTO gameDTO = new GameDTO("", 0, Boolean.TRUE);
 
+        Set<ConstraintViolation<GameDTO>> violations = validator.validate(gameDTO);
+
+        assertThat(violations).hasSize(2);
+        assertThat(violations).extracting(ConstraintViolation::getMessage)
+                .containsExactlyInAnyOrder("The console id should be greater than 0", "The game name should not be null or empty");
+    }
 }
