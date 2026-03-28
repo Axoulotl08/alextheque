@@ -8,9 +8,11 @@ import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("ConsoleController Test")
 public class ConsoleControllerTest extends TestContenerConfig {
 
     private static final String CONSOLE = "/api/v1/console";
@@ -48,14 +51,11 @@ public class ConsoleControllerTest extends TestContenerConfig {
 
 
     @Test
+    @DisplayName("Everything is OK : 200")
     public void whenAddConsole_GivenGoodDTO_thenRespondWith200() throws Exception {
         LocalDateTime now = LocalDateTime.now().minusYears(1L).truncatedTo(ChronoUnit.MICROS);
 
-        ConsoleDTO consoleDTO = new ConsoleDTO();
-        consoleDTO.setName("TestConsoleName");
-        consoleDTO.setZone(1);
-        consoleDTO.setLaunchDate(now);
-        consoleDTO.setManufacturer("TestManuf");
+        ConsoleDTO consoleDTO = new ConsoleDTO("TestConsoleName", "TestManuf", now, 1);
 
         String json = mapper.writeValueAsString(consoleDTO);
 
@@ -72,14 +72,12 @@ public class ConsoleControllerTest extends TestContenerConfig {
     }
 
     @Test
+    @DisplayName("Console name is wring : 400")
     public void whenAddConsole_GivenWrongName_thenRespondWith400() throws Exception{
-        LocalDateTime now = LocalDateTime.now().minusYears(1L).truncatedTo(ChronoUnit.MICROS);;
+        LocalDateTime now = LocalDateTime.now().minusYears(1L).truncatedTo(ChronoUnit.MICROS);
 
-        ConsoleDTO consoleDTO = new ConsoleDTO();
-        consoleDTO.setName("");
-        consoleDTO.setZone(1);
-        consoleDTO.setLaunchDate(now);
-        consoleDTO.setManufacturer("TestManuf");
+        ConsoleDTO consoleDTO = new ConsoleDTO("", "TestManuf", now, 1);
+
 
         String json = mapper.writeValueAsString(consoleDTO);
 
@@ -88,12 +86,16 @@ public class ConsoleControllerTest extends TestContenerConfig {
                         .content(json))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.message").value("The name should not be empty of null."))
-                .andExpect(jsonPath("$.typeError").value("ERROR_INPUT"));
+                .andExpect(jsonPath("$.message").value("Validation Error"))
+                .andExpect(jsonPath("$.status").value("400"))
+                .andExpect(jsonPath("$.error.length()").value(1))
+                .andExpect(jsonPath("$.error.name").value("The console name should not be null"));
 
     }
 
     @Test
+    @DisplayName("Get All Console")
+    @Sql(scripts = "/sql/init-console.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void whenGetConsole_thenRespondWith200() throws Exception {
         LocalDateTime nowMinusOneHour = LocalDateTime.now().minusHours(1L).truncatedTo(ChronoUnit.MILLIS);
 

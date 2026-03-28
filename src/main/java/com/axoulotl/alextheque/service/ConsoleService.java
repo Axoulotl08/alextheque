@@ -36,10 +36,10 @@ public class ConsoleService {
      */
     public Console addConsole(ConsoleDTO consoleDTO) throws AlexthequeStandardError {
         Console console = Console.builder()
-                .name(consoleDTO.getName())
-                .manufacturer(consoleDTO.getManufacturer())
-                .zone(Zone.getZoneFromInt(consoleDTO.getZone()))
-                .launchDate(consoleDTO.getLaunchDate()).build();
+                .name(consoleDTO.name())
+                .manufacturer(consoleDTO.manufacturer())
+                .zone(Zone.getZoneFromInt(consoleDTO.zone()))
+                .launchDate(consoleDTO.launchDate()).build();
 
         Console valReturn;
 

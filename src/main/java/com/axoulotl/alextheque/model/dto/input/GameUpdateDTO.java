@@ -1,25 +1,21 @@
 package com.axoulotl.alextheque.model.dto.input;
 
-import com.axoulotl.alextheque.service.validation.ValidDate;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.axoulotl.alextheque.service.validation.AtLeastOneField;
+import com.axoulotl.alextheque.service.validation.ValidDateRange;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class GameUpdateDTO {
+@ValidDateRange(start = "startDate", end = "endDate")
+@AtLeastOneField(
+        fields = {"startDate", "endDate", "gameTime"},
+        message = "At least one fields must be specified"
+)
+public record GameUpdateDTO(
+        LocalDate startDate,
 
-    @ValidDate
-    private LocalDate startDate;
+        LocalDate endDate,
 
-    @ValidDate
-    private LocalDate endDate;
-
-    @Min(value = 1, message = "Game time should be greater than 0")
-    private Long gameTime;
+        @Positive(message = "Game time should be greater than 0")
+        Long gameTime) {
 }

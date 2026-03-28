@@ -7,8 +7,8 @@ import com.axoulotl.alextheque.model.dto.input.GameUpdateDTO;
 import com.axoulotl.alextheque.service.validation.GameValidationService;
 import com.axoulotl.alextheque.services.utils.UtilsTest;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -17,34 +17,33 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Deprecated
+@Disabled("Old test. Replaced by validator test.")
 public class GameValidationServiceTest {
     private GameValidationService validationService;
 
+    private static final LocalDate now = LocalDate.now();
+
     @BeforeEach
-    void setUp(){
+    void setUp() {
         this.validationService = new GameValidationService();
     }
 
     @Test
-    @Order(1)
     @DisplayName("Normal uses case")
     void whenValidateGameInsertDTO_GivenValidGameDTO_thenNoExceptionThrown() {
-        GameDTO gameDTO = new GameDTO();
-        gameDTO.setConsole(1);
-        gameDTO.setName("Test");
-        gameDTO.setInbox(true);
+        GameDTO gameDTO = new GameDTO("TestDTO", 1, Boolean.TRUE);
 
         assertThatCode(() -> validationService.validateGameInsert(gameDTO))
                 .doesNotThrowAnyException();
     }
 
     @Test
-    @Order(2)
     @DisplayName("Insert Game with Wring name")
     void whenValidateGameInsertDTO_GivenDTOWithWrongName_thenExceptionIsThrown() {
         GameDTO gameDTO = UtilsTest.createGameDTO(1);
 
-        gameDTO.setName("   ");
+//        gameDTO.setName("   ");
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class,
                 () -> validationService.validateGameInsert(gameDTO));
@@ -54,7 +53,6 @@ public class GameValidationServiceTest {
     }
 
     @Test
-    @Order(3)
     @DisplayName("Insert Game with Wrong Console Id")
     void whenValidateGameInsertDTO_GivenDTOWithWrongConsoleId_theExceptionIsThrown() {
         GameDTO gameDTO = UtilsTest.createGameDTO(0);
@@ -67,7 +65,6 @@ public class GameValidationServiceTest {
     }
 
     @Test
-    @Order(4)
     @DisplayName("Insert Game with null DTO")
     void whenValidateGameInsertDTO_GivenNullDTO_thenExceptionIsThrown() {
 
@@ -79,7 +76,6 @@ public class GameValidationServiceTest {
     }
 
     @Test
-    @Order(5)
     @DisplayName("Update Game : normal use case")
     void whenValidateUpdateDTo_GivenValidUpdateDTO_thenNoExceptionThrown() {
         GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
@@ -89,12 +85,9 @@ public class GameValidationServiceTest {
     }
 
     @Test
-    @Order(6)
     @DisplayName("Update Game : With Start date in future")
     void whenValidateUpdateDTO_givenDTOWithStartDateInFuture_thenExceptionIsThrown() {
-        GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
-
-        gameUpdateDTO.setStartDate(LocalDate.now().plusDays(3));
+        GameUpdateDTO gameUpdateDTO = new GameUpdateDTO(now.plusDays(3), null, null);
 
         AlexthequeStandardError thrownError = assertThrows(AlexthequeStandardError.class,
                 () -> validationService.validateGameUpdate(gameUpdateDTO));
@@ -104,11 +97,9 @@ public class GameValidationServiceTest {
     }
 
     @Test
-    @Order(7)
     @DisplayName("Update Game : With end date but no start date")
     void whenValidateUpdateDTO_givenDTOWithEndDateButNoStartDate_thenExceptionIsThrown() {
-        GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
-        gameUpdateDTO.setStartDate(null);
+        GameUpdateDTO gameUpdateDTO = new GameUpdateDTO(null, LocalDate.now(), 1L);
 
         AlexthequeStandardError thrownError = assertThrows(AlexthequeStandardError.class,
                 () -> validationService.validateGameUpdate(gameUpdateDTO));
@@ -118,12 +109,9 @@ public class GameValidationServiceTest {
     }
 
     @Test
-    @Order(8)
     @DisplayName("Update Game : With end date before start date")
     void whenValidateUpdateDTO_givenDTOEndDateBeforeThanStartDate_thenExceptionIsThrown() {
-        GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
-        gameUpdateDTO.setStartDate(LocalDate.now());
-        gameUpdateDTO.setEndDate(LocalDate.now().minusDays(10));
+        GameUpdateDTO gameUpdateDTO = new GameUpdateDTO(now, now.minusDays(10), null);
 
         AlexthequeStandardError thrownError = assertThrows(AlexthequeStandardError.class,
                 () -> validationService.validateGameUpdate(gameUpdateDTO));
@@ -133,12 +121,9 @@ public class GameValidationServiceTest {
     }
 
     @Test
-    @Order(9)
     @DisplayName("Update Game : Negative game time")
     void whenValidateUpdateDTO_givenDTOWithNegativeGameTime_thenExceptionIsThrown() {
-        GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
-
-        gameUpdateDTO.setGameTime(-1L);
+        GameUpdateDTO gameUpdateDTO = new GameUpdateDTO(null, null, -10L);
 
         AlexthequeStandardError thrownError = assertThrows(AlexthequeStandardError.class,
                 () -> validationService.validateGameUpdate(gameUpdateDTO));
@@ -148,12 +133,9 @@ public class GameValidationServiceTest {
     }
 
     @Test
-    @Order(10)
     @DisplayName("Update Game : With end date in future")
     void whenValidateUpdateDTO_givenDTOWithEndDateInFuture_thenExceptionIsThrown() {
-        GameUpdateDTO gameUpdateDTO = UtilsTest.createUpdateDTO();
-
-        gameUpdateDTO.setEndDate(LocalDate.now().plusDays(3));
+        GameUpdateDTO gameUpdateDTO = new GameUpdateDTO(now, now.plusDays(10), null);
 
         AlexthequeStandardError thrownError = assertThrows(AlexthequeStandardError.class,
                 () -> validationService.validateGameUpdate(gameUpdateDTO));

@@ -6,11 +6,13 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = ValidDateValidator.class)
-@Target({ElementType.FIELD})
+@Constraint(validatedBy = DateRangeValidator.class)
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidDate {
-    String message() default "Invalid Date";
+public @interface ValidDateRange {
+    String message() default "End date must be after start date";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+    String start();
+    String end();
 }

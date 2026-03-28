@@ -1,0 +1,2 @@
+DELETE FROM game;
+DELETE FROM console;

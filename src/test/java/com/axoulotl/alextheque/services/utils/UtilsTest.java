@@ -45,18 +45,10 @@ public class UtilsTest{
     }
 
     public static GameDTO createGameDTO(Integer consoleId){
-        GameDTO dto = new GameDTO();
-        dto.setName("TestDTO");
-        dto.setConsole(consoleId);
-        dto.setInbox(true);
-        return dto;
+        return new GameDTO("TestDTO", consoleId, Boolean.TRUE);
     }
 
     public static GameUpdateDTO createUpdateDTO(){
-        GameUpdateDTO dto = new GameUpdateDTO();
-        dto.setStartDate(LocalDate.now().minusMonths(2));
-        dto.setEndDate(LocalDate.now());
-        dto.setGameTime(100L);
-        return dto;
+        return new GameUpdateDTO(LocalDate.now().minusMonths(2), LocalDate.now(), 100L);
     }
 }

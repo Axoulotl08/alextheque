@@ -6,7 +6,6 @@ import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.model.entity.enums.Status;
 import jakarta.persistence.criteria.Join;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
@@ -46,20 +45,20 @@ public class GameSpecifications {
 
     public static Specification<Game> getSpecification(SearchGameDTO searchGameDTO) {
         Specification<Game> specification = Specification.where(null);
-        if(StringUtils.isNotBlank(searchGameDTO.getName())){
-            specification = specification.and(GameSpecifications.hasNameLike(searchGameDTO.getName()));
+        if(StringUtils.isNotBlank(searchGameDTO.name())){
+            specification = specification.and(GameSpecifications.hasNameLike(searchGameDTO.name()));
         }
 
-        if(searchGameDTO.getConsoleId() != null && searchGameDTO.getConsoleId() != 0){
-            specification = specification.and(GameSpecifications.hasGameId(searchGameDTO.getConsoleId()));
+        if(searchGameDTO.consoleId() != null && searchGameDTO.consoleId() != 0){
+            specification = specification.and(GameSpecifications.hasGameId(searchGameDTO.consoleId()));
         }
 
-        if(searchGameDTO.getStartedAfter() != null){
-            specification = specification.and(GameSpecifications.hadStartedBefore(searchGameDTO.getStartedAfter()));
+        if(searchGameDTO.startedAfter() != null){
+            specification = specification.and(GameSpecifications.hadStartedBefore(searchGameDTO.startedAfter()));
         }
 
-        if(searchGameDTO.getStatusId() != null) {
-            specification = specification.and(GameSpecifications.hasStatus(Status.getStatusFromInt(searchGameDTO.getStatusId())));
+        if(searchGameDTO.statusId() != null) {
+            specification = specification.and(GameSpecifications.hasStatus(Status.getStatusFromInt(searchGameDTO.statusId())));
         }
 
         return specification;

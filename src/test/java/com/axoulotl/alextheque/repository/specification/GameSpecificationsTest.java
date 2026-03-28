@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 
-@Sql(scripts = "/sql/init-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(scripts = "/sql/init-specification.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class GameSpecificationsTest extends TestContenerConfig {
 
     @Autowired
@@ -24,8 +24,7 @@ public class GameSpecificationsTest extends TestContenerConfig {
     @Test
     @Transactional
     void whenSearchByName_shouldReturnGameWithMatchingName(){
-        SearchGameDTO searchGameDTO = new SearchGameDTO();
-        searchGameDTO.setName("God");
+        SearchGameDTO searchGameDTO = new SearchGameDTO(null, "God", null, null);
 
         Specification<Game> specification = GameSpecifications.getSpecification(searchGameDTO);
         List<Game> results = gameRepository.findAll(specification);
@@ -40,8 +39,7 @@ public class GameSpecificationsTest extends TestContenerConfig {
     @Test
     @Transactional
     void whenSearchByStartedAfter_shouldReturnGameStartedAfter(){
-        SearchGameDTO searchGameDTO = new SearchGameDTO();
-        searchGameDTO.setStartedAfter(LocalDate.of(2025,12,12));
+        SearchGameDTO searchGameDTO = new SearchGameDTO(null, null, LocalDate.of(2025,12,12), null);
 
         Specification<Game> specification = GameSpecifications.getSpecification(searchGameDTO);
         List<Game> results = gameRepository.findAll(specification);
@@ -55,8 +53,7 @@ public class GameSpecificationsTest extends TestContenerConfig {
     @Test
     @Transactional
     void whenSearchByStatus_shouldReturnGameWithMatchingStatus(){
-        SearchGameDTO searchGameDTO = new SearchGameDTO();
-        searchGameDTO.setStatusId(4);
+        SearchGameDTO searchGameDTO = new SearchGameDTO(null, null, null, 4);
 
         Specification<Game> specification = GameSpecifications.getSpecification(searchGameDTO);
         List<Game> results = gameRepository.findAll(specification);
@@ -70,8 +67,7 @@ public class GameSpecificationsTest extends TestContenerConfig {
     @Test
     @Transactional
     void whenSearchByConsoleId_shouldReturnGameWithMatchingConsoleId(){
-        SearchGameDTO searchGameDTO = new SearchGameDTO();
-        searchGameDTO.setConsoleId(1);
+        SearchGameDTO searchGameDTO = new SearchGameDTO(1, null, null, null);
 
         Specification<Game> specification = GameSpecifications.getSpecification(searchGameDTO);
         List<Game> results = gameRepository.findAll(specification);
@@ -85,11 +81,7 @@ public class GameSpecificationsTest extends TestContenerConfig {
     @Test
     @Transactional
     void whenSearchWithFullCriteria_shouldReturnGameWithMatchingFullCriteria(){
-        SearchGameDTO searchGameDTO = new SearchGameDTO();
-        searchGameDTO.setConsoleId(1);
-        searchGameDTO.setStatusId(4);
-        searchGameDTO.setName("God");
-        searchGameDTO.setStartedAfter(LocalDate.of(2025,12,12));
+        SearchGameDTO searchGameDTO = new SearchGameDTO(1, "God", LocalDate.of(2025,12,12), 4);
 
         Specification<Game> specification = GameSpecifications.getSpecification(searchGameDTO);
         List<Game> results = gameRepository.findAll(specification);

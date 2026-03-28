@@ -1,9 +1,7 @@
 package com.axoulotl.alextheque.services;
 
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
-import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.dto.input.SearchGameDTO;
-import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
 import com.axoulotl.alextheque.model.dto.output.GamesOutputDTO;
 import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.repository.GameRepository;
@@ -22,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,8 +51,7 @@ public class SearchServiceTest {
 
         Game game = UtilsTest.createGame(1);
         List<Game> gameList = List.of(game);
-        SearchGameDTO searchGameDTO = new SearchGameDTO();
-        searchGameDTO.setName("Test");
+        SearchGameDTO searchGameDTO = new SearchGameDTO(null, "Test", null, null);
 
         Page<Game> gamePage = new PageImpl<>(gameList, PageRequest.of(page, size), gameList.size());
 

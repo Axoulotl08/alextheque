@@ -9,6 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface ConsoleRepository extends JpaRepository<Console, Integer> {
-    @EntityGraph(attributePaths = {"gameList"})
-    Optional<Console> findById(Integer id);
 }

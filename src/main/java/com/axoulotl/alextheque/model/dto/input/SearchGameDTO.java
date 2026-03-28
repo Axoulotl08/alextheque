@@ -1,26 +1,21 @@
 package com.axoulotl.alextheque.model.dto.input;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
-import lombok.Data;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-@Data
-public class SearchGameDTO {
+public record SearchGameDTO(
 
-    @Positive(message = "L'ID de la console doit être positif")
-    Integer consoleId;
+    @Positive(message = "Console Id should be positive")
+    Integer consoleId,
 
-    @Size(min = 2, max = 255, message = "Le nom doit contenir entre 2 et 255 caractères")
-    String name;
+    @Size(min = 2, max = 255, message = "Name should be between 2 and 255 characters")
+    String name,
 
-    @PastOrPresent(message = "La date de départ ne doit pas être dans le futur")
-    LocalDate startedAfter;
+    @PastOrPresent(message = "Start date should not be in the future")
+    LocalDate startedAfter,
 
-    @Positive(message = "Le status doit être positif")
-    @Max(value = 4, message = "Le status ne doit pas être plus grand que 4")
-    Integer statusId;
+    @Max(value = 4, message = "Status should be between 1 and 4")
+    @Min(value = 1, message = "Status should be between 1 and 4")
+    Integer statusId){
 }
