@@ -70,7 +70,9 @@ public class GameServiceTest {
     @Test
     void whenAddGame_GivenDTOButBDDError_thenExceptionIsThrown(){
         GameDTO gameDTO = UtilsTest.createGameDTO(1);
+        Optional<Console> console = Optional.of(UtilsTest.createConsole(1));
 
+        when(consoleRepository.findById(any(Integer.class))).thenReturn(console);
         doThrow(new RuntimeException("Simulated DB Connection error")).when(gameRepository).save(any(Game.class));
 
         AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> gameService.addGame(gameDTO));

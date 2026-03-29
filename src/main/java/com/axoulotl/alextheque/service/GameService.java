@@ -56,6 +56,10 @@ public class GameService {
             throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "There is no console with this ID.");
         }
 
+        if(console.isEmpty()){
+            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "There is no console with this ID.");
+        }
+
         Game game = Game.builder()
                 .name(gameDTO.name())
                 .console(console.get())
