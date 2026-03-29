@@ -3,7 +3,7 @@ package com.axoulotl.alextheque.services.validation;
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.ConsoleDTO;
-import com.axoulotl.alextheque.service.validation.ConsoleValidationService;
+import com.axoulotl.alextheque.validation.ConsoleValidationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

@@ -1,63 +1,38 @@
 package com.axoulotl.alextheque.service;
 
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
-import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.ConsoleDTO;
 import com.axoulotl.alextheque.model.dto.output.ConsoleOutputDTO;
 import com.axoulotl.alextheque.model.entity.Console;
-import com.axoulotl.alextheque.model.entity.enums.Zone;
-import com.axoulotl.alextheque.repository.ConsoleRepository;
-import com.axoulotl.alextheque.service.converter.ConsoleToConsoleDTOConverter;
-import com.axoulotl.alextheque.service.validation.ConsoleValidationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class ConsoleService {
-
-    ConsoleRepository consoleRepository;
-    ConsoleToConsoleDTOConverter converter;
-
-    @Autowired
-    public ConsoleService(ConsoleRepository consoleRepository,
-                          ConsoleToConsoleDTOConverter converter){
-        this.consoleRepository = consoleRepository;
-        this.converter = converter;
-    }
+public interface ConsoleService {
+    /**
+     * Create and save a new console into the database.
+     * <p>
+     *     Validate data entry (name, manufacturer, ...) before the creation
+     * </p>
+     *
+     * @param consoleDTO - ConsoleDTO with all the data to create (name, manufacturer, area and launch date)
+     * @return the craated console with it's unique id
+     * @throws AlexthequeStandardError in case of an error during the save into DB
+     *
+     * @see Console
+     * @see ConsoleDTO
+     */
+    Console addConsole(ConsoleDTO consoleDTO) throws AlexthequeStandardError;
 
     /**
-     * Add console into DB
+     * Get all the console saved in the database
+     * <p>
+     *     Consoles are returned in a DTO which includes all the informations
+     *     of the consoles.
+     * </p>
      *
-     * @param consoleDTO - ConsoleDTO
-     * @return the console created and saved into DB
-     * @throws AlexthequeStandardError in case of bad input or error during the save into DB
-     */
-    public Console addConsole(ConsoleDTO consoleDTO) throws AlexthequeStandardError {
-        Console console = Console.builder()
-                .name(consoleDTO.name())
-                .manufacturer(consoleDTO.manufacturer())
-                .zone(Zone.getZoneFromInt(consoleDTO.zone()))
-                .launchDate(consoleDTO.launchDate()).build();
-
-        Console valReturn;
-
-        try{
-            valReturn = consoleRepository.save(console);
-        } catch (Exception e ){
-            throw new AlexthequeStandardError(StandardErrorEnum.ERROR_DATABASE, "Something bad happen during save into DB.");
-        }
-        return valReturn;
-    }
-
-    /**
-     * Get all the console in DB and return it.
+     * @return -  all the console that are saved into the database. Or an empty list is there are no console
      *
-     * @return all the console that are saved into DB.
+     * @see ConsoleOutputDTO
      */
-    public List<ConsoleOutputDTO> getAllConsole(){
-
-        return consoleRepository.findAll().stream().map(converter::convertConsoleToConsoleOutputDTO).toList();
-    }
+    List<ConsoleOutputDTO> getAllConsole();
 }

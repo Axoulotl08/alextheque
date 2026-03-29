@@ -1,6 +1,7 @@
-package com.axoulotl.alextheque.service.validation;
+package com.axoulotl.alextheque.validation.annotation;
 
 
+import com.axoulotl.alextheque.validation.validator.AtLeastOneFieldValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
