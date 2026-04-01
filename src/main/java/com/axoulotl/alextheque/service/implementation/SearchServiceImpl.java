@@ -1,4 +1,4 @@
-package com.axoulotl.alextheque.service;
+package com.axoulotl.alextheque.service.implementation;
 
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
@@ -7,9 +7,9 @@ import com.axoulotl.alextheque.model.dto.output.GamesOutputDTO;
 import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.repository.GameRepository;
 import com.axoulotl.alextheque.repository.specification.GameSpecifications;
+import com.axoulotl.alextheque.service.SearchService;
 import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
-import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,29 +17,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SearchServiceImpl {
+@RequiredArgsConstructor
+public class SearchServiceImpl implements SearchService {
 
-    GameRepository gameRepository;
-    GameToGameDTOConverter converter;
-    EntityManager entityManager;
+    private final GameRepository gameRepository;
+    private final GameToGameDTOConverter converter;
 
-    @Autowired
-    public SearchServiceImpl(GameRepository gameRepository, GameToGameDTOConverter converter,
-                             EntityManager entityManager) {
-        this.gameRepository = gameRepository;
-        this.converter = converter;
-        this.entityManager = entityManager;
-    }
 
-    /**
-     * Search all the game following the search filter
-     *
-     * @param searchGameDTO - The entry data with all the criteria to meet
-     * @param page - The page to display
-     * @param size - The number of result per page
-     * @return a {@link GamesOutputDTO} - which check all the search specification and matching the current pages
-     * @throws AlexthequeStandardError a {@link AlexthequeStandardError} - if any error happen during the proccess
-     */
     public GamesOutputDTO searchGameWithCriteria(SearchGameDTO searchGameDTO, int page, int size) throws AlexthequeStandardError {
         Pageable pageable = PageRequest.of(page, size);
         Page<Game> games = null;

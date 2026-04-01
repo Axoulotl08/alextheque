@@ -1,4 +1,4 @@
-package com.axoulotl.alextheque.service;
+package com.axoulotl.alextheque.service.implementation;
 
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
@@ -11,10 +11,10 @@ import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.model.entity.enums.Status;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.repository.GameRepository;
+import com.axoulotl.alextheque.service.GameService;
 import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

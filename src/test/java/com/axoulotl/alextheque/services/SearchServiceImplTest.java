@@ -5,7 +5,7 @@ import com.axoulotl.alextheque.model.dto.input.SearchGameDTO;
 import com.axoulotl.alextheque.model.dto.output.GamesOutputDTO;
 import com.axoulotl.alextheque.model.entity.Game;
 import com.axoulotl.alextheque.repository.GameRepository;
-import com.axoulotl.alextheque.service.SearchServiceImpl;
+import com.axoulotl.alextheque.service.implementation.SearchServiceImpl;
 import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
 import com.axoulotl.alextheque.services.utils.UtilsTest;
 import org.junit.jupiter.api.BeforeEach;

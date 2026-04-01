@@ -7,6 +7,15 @@ import com.axoulotl.alextheque.model.entity.Console;
 
 import java.util.List;
 
+/**
+ * Console related services
+ * <p>
+ *     This interface defines jobs operations for console
+ * </p>
+ *
+ * @version 1.0
+ * @since 2026-01-01
+ */
 public interface ConsoleService {
     /**
      * Create and save a new console into the database.
@@ -15,7 +24,7 @@ public interface ConsoleService {
      * </p>
      *
      * @param consoleDTO - ConsoleDTO with all the data to create (name, manufacturer, area and launch date)
-     * @return the craated console with it's unique id
+     * @return the created console with its unique id
      * @throws AlexthequeStandardError in case of an error during the save into DB
      *
      * @see Console
@@ -26,11 +35,11 @@ public interface ConsoleService {
     /**
      * Get all the console saved in the database
      * <p>
-     *     Consoles are returned in a DTO which includes all the informations
+     *     Consoles are returned in a DTO which includes all the information
      *     of the consoles.
      * </p>
      *
-     * @return -  all the console that are saved into the database. Or an empty list is there are no console
+     * @return all the console that are saved into the database. Or an empty list is there are no console
      *
      * @see ConsoleOutputDTO
      */

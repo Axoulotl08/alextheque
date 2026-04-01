@@ -4,7 +4,7 @@ import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.model.dto.input.SearchGameDTO;
 import com.axoulotl.alextheque.model.dto.output.ErrorDTO;
 import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
-import com.axoulotl.alextheque.service.SearchServiceImpl;
+import com.axoulotl.alextheque.service.implementation.SearchServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
