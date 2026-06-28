@@ -31,7 +31,7 @@ public class GameServiceImpl implements GameService {
     private final GameToGameDTOConverter converter;
 
     /**
-     * Add a game in collection after validation the json content
+     * Add a game in collection after validation the JSON content
      *
      * @param gameDTO - gameDTO
      * @return the entity created in database

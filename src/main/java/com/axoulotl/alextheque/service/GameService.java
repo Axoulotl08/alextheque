@@ -44,7 +44,7 @@ public interface GameService {
      * @param page - the current page to return
      * @param size - the number of game per pages
      * @return all the games following the current pagination. Or an empty list if there are any/
-     * @throws AlexthequeStandardError in case of a error during the pagination process
+     * @throws AlexthequeStandardError in case of an error during the pagination process
      */
     GamesOutputDTO getAllGames(int page, int size) throws AlexthequeStandardError;
 

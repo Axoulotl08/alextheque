@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GameController {
 
-    GameService gameServiceImpl;
+    private final GameService gameServiceImpl;
 
     @Operation(summary = "Add a new game in collection")
     @ApiResponses(value = {
