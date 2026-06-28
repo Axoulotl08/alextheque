@@ -4,7 +4,7 @@ import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;
 import com.axoulotl.alextheque.model.dto.input.GameDTO;
 import com.axoulotl.alextheque.model.dto.input.GameUpdateDTO;
-import com.axoulotl.alextheque.service.validation.GameValidationService;
+import com.axoulotl.alextheque.validation.GameValidationService;
 import com.axoulotl.alextheque.services.utils.UtilsTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

@@ -4,7 +4,7 @@ import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.model.dto.input.SearchGameDTO;
 import com.axoulotl.alextheque.model.dto.output.ErrorDTO;
 import com.axoulotl.alextheque.model.dto.output.GameOutputDTO;
-import com.axoulotl.alextheque.service.SearchService;
+import com.axoulotl.alextheque.service.implementation.SearchServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/search")
 public class SearchController {
 
-    SearchService searchService;
+    SearchServiceImpl searchServiceImpl;
 
     @Autowired
-    public SearchController(SearchService searchService) {
-        this.searchService = searchService;
+    public SearchController(SearchServiceImpl searchServiceImpl) {
+        this.searchServiceImpl = searchServiceImpl;
     }
 
     @Operation(summary = "Search a game in DB")
@@ -49,7 +49,7 @@ public class SearchController {
                                              @RequestParam(value = "size", defaultValue = "15") int size){
         ResponseEntity<Object> responseEntity;
         try {
-            responseEntity = ResponseEntity.ok(searchService.searchGameWithCriteria(searchGameDTO, page, size));
+            responseEntity = ResponseEntity.ok(searchServiceImpl.searchGameWithCriteria(searchGameDTO, page, size));
         } catch (AlexthequeStandardError e) {
             responseEntity = ResponseEntity.internalServerError().body(new ErrorDTO(e.getComment(), e.getError()));
         }

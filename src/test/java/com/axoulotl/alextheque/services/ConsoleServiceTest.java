@@ -7,7 +7,7 @@ import com.axoulotl.alextheque.model.entity.Console;
 import com.axoulotl.alextheque.model.entity.enums.Zone;
 import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.service.ConsoleService;
-import com.axoulotl.alextheque.service.validation.ConsoleValidationService;
+import com.axoulotl.alextheque.service.implementation.ConsoleServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +29,7 @@ public class ConsoleServiceTest {
     private ConsoleRepository consoleRepository;
 
     @InjectMocks
-    private ConsoleService consoleService;
+    private ConsoleServiceImpl consoleService;
 
     private static final LocalDateTime nowMinusOneHour = LocalDateTime.now().minusHours(1L).truncatedTo(ChronoUnit.MILLIS);
 

@@ -11,6 +11,7 @@ import com.axoulotl.alextheque.repository.ConsoleRepository;
 import com.axoulotl.alextheque.repository.GameRepository;
 import com.axoulotl.alextheque.service.GameService;
 import com.axoulotl.alextheque.service.converter.GameToGameDTOConverter;
+import com.axoulotl.alextheque.service.implementation.GameServiceImpl;
 import com.axoulotl.alextheque.services.utils.UtilsTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +32,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-public class GameServiceTest {
+public class GameServiceImplTest {
 
     @Mock
     GameRepository gameRepository;
@@ -43,7 +44,7 @@ public class GameServiceTest {
     GameToGameDTOConverter converter;
 
     @InjectMocks
-    GameService gameService;
+    GameServiceImpl gameServiceImpl;
 
     @Test
     void whenAddGame_GivenGoodDto_TheGameIsSaved() throws AlexthequeStandardError {
@@ -58,7 +59,7 @@ public class GameServiceTest {
         when(gameRepository.save(any(Game.class))).thenReturn(game);
         when(converter.gameToGameDTO(any(Game.class))).thenCallRealMethod();
 
-        GameOutputDTO result = gameService.addGame(gameDTO);
+        GameOutputDTO result = gameServiceImpl.addGame(gameDTO);
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1);
@@ -70,10 +71,12 @@ public class GameServiceTest {
     @Test
     void whenAddGame_GivenDTOButBDDError_thenExceptionIsThrown(){
         GameDTO gameDTO = UtilsTest.createGameDTO(1);
+        Optional<Console> console = Optional.of(UtilsTest.createConsole(1));
 
+        when(consoleRepository.findById(any(Integer.class))).thenReturn(console);
         doThrow(new RuntimeException("Simulated DB Connection error")).when(gameRepository).save(any(Game.class));
 
-        AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> gameService.addGame(gameDTO));
+        AlexthequeStandardError thrownException = assertThrows(AlexthequeStandardError.class, () -> gameServiceImpl.addGame(gameDTO));
 
         verify(gameRepository, times(1)).save(any(Game.class));
         assertThat(thrownException.getError()).isEqualTo(StandardErrorEnum.ERROR_DATABASE);
@@ -102,7 +105,7 @@ public class GameServiceTest {
         List<GameOutputDTO> gameOutputDTOList = Collections.singletonList(gameOutputDTO);
         when(converter.gamesToListOfGames(anyList())).thenReturn(gameOutputDTOList);
 
-        GamesOutputDTO result = gameService.getAllGames(page, size);
+        GamesOutputDTO result = gameServiceImpl.getAllGames(page, size);
 
         assertThat(result).isNotNull();
         assertThat(result.getNbGames()).isEqualTo(11L);

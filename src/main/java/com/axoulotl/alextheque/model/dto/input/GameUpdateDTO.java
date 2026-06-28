@@ -1,7 +1,7 @@
 package com.axoulotl.alextheque.model.dto.input;
 
-import com.axoulotl.alextheque.service.validation.AtLeastOneField;
-import com.axoulotl.alextheque.service.validation.ValidDateRange;
+import com.axoulotl.alextheque.validation.annotation.AtLeastOneField;
+import com.axoulotl.alextheque.validation.annotation.ValidDateRange;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;

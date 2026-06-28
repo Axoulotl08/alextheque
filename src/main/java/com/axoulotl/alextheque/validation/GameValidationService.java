@@ -1,4 +1,4 @@
-package com.axoulotl.alextheque.service.validation;
+package com.axoulotl.alextheque.validation;
 
 import com.axoulotl.alextheque.exception.AlexthequeStandardError;
 import com.axoulotl.alextheque.exception.StandardErrorEnum;

@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +22,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class GameController {
 
-    GameService gameService;
-
-    @Autowired
-    public GameController(GameService gameService) {
-        this.gameService = gameService;
-    }
+    private final GameService gameServiceImpl;
 
     @Operation(summary = "Add a new game in collection")
     @ApiResponses(value = {
@@ -53,7 +49,7 @@ public class GameController {
     public ResponseEntity<Object> addGame(@Valid @RequestBody GameDTO gameDTO) {
         ResponseEntity<Object> responseEntity = null;
         try {
-            responseEntity = ResponseEntity.ok().body(gameService.addGame(gameDTO));
+            responseEntity = ResponseEntity.ok().body(gameServiceImpl.addGame(gameDTO));
         } catch (AlexthequeStandardError ex) {
             if (ex.getError() == StandardErrorEnum.ERROR_INPUT)
                 responseEntity = ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
@@ -88,7 +84,7 @@ public class GameController {
         ResponseEntity<Object> responseEntity;
 
         try {
-            responseEntity = ResponseEntity.ok().body(gameService.getAllGames(page, size));
+            responseEntity = ResponseEntity.ok().body(gameServiceImpl.getAllGames(page, size));
         } catch (AlexthequeStandardError ex) {
             responseEntity = ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
         } catch (Exception ex) {
@@ -119,7 +115,7 @@ public class GameController {
     public ResponseEntity<Object> getGameById(@PositiveOrZero @PathVariable Integer id) {
         ResponseEntity<Object> responseEntity;
         try {
-            responseEntity = ResponseEntity.ok().body(gameService.getGameFromId(id));
+            responseEntity = ResponseEntity.ok().body(gameServiceImpl.getGameFromId(id));
         } catch (AlexthequeStandardError ex) {
             responseEntity = ResponseEntity.internalServerError().body(new ErrorDTO(ex.getComment(), ex.getError()));
         }
@@ -150,7 +146,7 @@ public class GameController {
             @Valid @RequestBody GameUpdateDTO gameUpdateDTO) {
         ResponseEntity<Object> responseEntity = null;
         try {
-            responseEntity = ResponseEntity.ok().body(gameService.updateGameFromId(id, gameUpdateDTO));
+            responseEntity = ResponseEntity.ok().body(gameServiceImpl.updateGameFromId(id, gameUpdateDTO));
         } catch (AlexthequeStandardError ex) {
             if (ex.getError() == StandardErrorEnum.ERROR_INPUT)
                 responseEntity = ResponseEntity.badRequest().body(new ErrorDTO(ex.getComment(), ex.getError()));
